@@ -1,0 +1,7 @@
+gSystem->Load("libBlue.so");
+
+.L B_NegVar.cxx++
+B_NegVar(0)
+B_NegVar(1)
+
+.q

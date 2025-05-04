@@ -1,0 +1,56 @@
+gSystem->Load("libBlue.so");
+
+
+// one observable - evaluated correlations
+
+.L B_PLB_761_350.cxx++
+   B_PLB_761_350(0)
+
+.L B_PLB_761_350_x0_x1_DisPai.cxx++
+   B_PLB_761_350_x0_x1_DisPai()
+.L B_PLB_761_350_x0_x2_DisPai.cxx++
+   B_PLB_761_350_x0_x2_DisPai()
+.L B_PLB_761_350_x1_x2_DisPai.cxx++
+   B_PLB_761_350_x1_x2_DisPai()
+
+.L B_PLB_761_350_x0_x1_CorPai.cxx++
+   B_PLB_761_350_x0_x1_CorPai()
+.L B_PLB_761_350_x0_x2_CorPai.cxx++
+   B_PLB_761_350_x0_x2_CorPai()
+.L B_PLB_761_350_x1_x2_CorPai.cxx++
+   B_PLB_761_350_x1_x2_CorPai()
+
+.L B_PLB_761_350_all_NObs_1_Cor_0_DisRes_Obs_0.cxx++
+   B_PLB_761_350_all_NObs_1_Cor_0_DisRes_Obs_0()
+.L B_PLB_761_350_dil_Cor_0_DisRes_Obs_0.cxx++
+   B_PLB_761_350_dil_Cor_0_DisRes_Obs_0()
+.L B_PLB_761_350_old_Cor_0_DisRes_Obs_0.cxx++
+   B_PLB_761_350_old_Cor_0_DisRes_Obs_0()
+
+// one observable - traditional correlations
+ 
+B_PLB_761_350(1)
+.L B_PLB_761_350_all_NObs_1_Cor_1_DisRes_Obs_0.cxx++
+   B_PLB_761_350_all_NObs_1_Cor_1_DisRes_Obs_0()
+.L B_PLB_761_350_dil_Cor_1_DisRes_Obs_0.cxx++
+   B_PLB_761_350_dil_Cor_1_DisRes_Obs_0()
+.L B_PLB_761_350_old_Cor_1_DisRes_Obs_0.cxx++
+   B_PLB_761_350_old_Cor_1_DisRes_Obs_0()
+
+// two observables - evaluated correlations
+
+B_PLB_761_350(2)
+.L B_PLB_761_350_all_NObs_2_Cor_0_DisRes_Obs_0.cxx++
+   B_PLB_761_350_all_NObs_2_Cor_0_DisRes_Obs_0()
+.L B_PLB_761_350_all_NObs_2_Cor_0_DisRes_Obs_1.cxx++
+   B_PLB_761_350_all_NObs_2_Cor_0_DisRes_Obs_1()
+
+// two observables - traditional correlations
+
+B_PLB_761_350(3)
+.L B_PLB_761_350_all_NObs_2_Cor_1_DisRes_Obs_0.cxx++
+   B_PLB_761_350_all_NObs_2_Cor_1_DisRes_Obs_0()
+.L B_PLB_761_350_all_NObs_2_Cor_1_DisRes_Obs_1.cxx++
+   B_PLB_761_350_all_NObs_2_Cor_1_DisRes_Obs_1()
+
+.q

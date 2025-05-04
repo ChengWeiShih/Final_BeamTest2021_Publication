@@ -1,0 +1,17 @@
+gSystem->Load("libBlue.so");
+
+.L B_JHEP_10_072.cxx++
+
+B_JHEP_10_072(0)
+.L B_JHEP_10_072_Wgg_0_x0_x1_DisPai.cxx++
+B_JHEP_10_072_Wgg_0_x0_x1_DisPai()
+.L B_JHEP_10_072_Zgg_0_x2_x3_DisPai.cxx++
+B_JHEP_10_072_Zgg_0_x2_x3_DisPai()
+
+B_JHEP_10_072(1)
+.L B_JHEP_10_072_Wgg_1_x0_x1_DisPai.cxx++
+B_JHEP_10_072_Wgg_1_x0_x1_DisPai()
+.L B_JHEP_10_072_Zgg_1_x2_x3_DisPai.cxx++
+B_JHEP_10_072_Zgg_1_x2_x3_DisPai()
+
+.q

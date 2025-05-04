@@ -1,0 +1,35 @@
+gSystem->Load("libBlue.so");
+
+.L B_arXiv_1305_3929.cxx++
+B_arXiv_1305_3929(0)
+
+.L B_arXiv_1305_3929_DisRes_Obs_0.cxx++
+   B_arXiv_1305_3929_DisRes_Obs_0()
+
+B_arXiv_1305_3929(1)
+.L B_arXiv_1305_3929_1_AccImp_Obs_0.cxx++
+   B_arXiv_1305_3929_1_AccImp_Obs_0()
+
+B_arXiv_1305_3929(2)
+.L B_arXiv_1305_3929_2_DisRes_Obs_0.cxx++
+.L B_arXiv_1305_3929_2_DisRes_Obs_1.cxx++
+.L B_arXiv_1305_3929_2_DisRes_Obs_2.cxx++
+.L B_arXiv_1305_3929_2_DisRes_Obs_3.cxx++
+B_arXiv_1305_3929_2_DisRes_Obs_0()
+B_arXiv_1305_3929_2_DisRes_Obs_1()
+B_arXiv_1305_3929_2_DisRes_Obs_2()
+B_arXiv_1305_3929_2_DisRes_Obs_3()
+.L B_arXiv_1305_3929_2_AccImp_Obs_0.cxx++
+.L B_arXiv_1305_3929_2_AccImp_Obs_1.cxx++
+.L B_arXiv_1305_3929_2_AccImp_Obs_2.cxx++
+.L B_arXiv_1305_3929_2_AccImp_Obs_3.cxx++
+B_arXiv_1305_3929_2_AccImp_Obs_0()
+B_arXiv_1305_3929_2_AccImp_Obs_1()
+B_arXiv_1305_3929_2_AccImp_Obs_2()
+B_arXiv_1305_3929_2_AccImp_Obs_3()
+
+B_arXiv_1305_3929(3)
+B_arXiv_1305_3929(4)
+B_arXiv_1305_3929(5)
+
+.q

@@ -1,0 +1,6 @@
+gSystem->Load("libBlue.so");
+
+.L B_PRD88_052018.cxx++
+B_PRD88_052018(0)
+B_PRD88_052018(1)
+.q

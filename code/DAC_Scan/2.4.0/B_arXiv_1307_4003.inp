@@ -1,0 +1,8 @@
+gSystem->Load("libBlue.so");
+
+.L B_arXiv_1307_4003.cxx++
+B_arXiv_1307_4003(0)
+B_arXiv_1307_4003(1)
+B_arXiv_1307_4003(2)
+B_arXiv_1307_4003(3)
+.q

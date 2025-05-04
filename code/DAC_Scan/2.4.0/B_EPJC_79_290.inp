@@ -1,0 +1,51 @@
+gSystem->Load("libBlue.so");
+
+.L B_EPJC_79_290.cxx++
+
+// --- Flag == 0
+B_EPJC_79_290(0)
+.L B_EPJC_79_290_0_AccImp_Obs_0.cxx++
+B_EPJC_79_290_0_AccImp_Obs_0()
+
+// --- Flag == 1
+B_EPJC_79_290(1)
+.L B_EPJC_79_290_1_AccImp_Obs_0.cxx++
+B_EPJC_79_290_1_AccImp_Obs_0()
+
+// --- Flag == 2
+B_EPJC_79_290(2)
+.L B_EPJC_79_290_2_AccImp_Obs_0.cxx++
+.L B_EPJC_79_290_2_AccImp_Obs_1.cxx++
+.L B_EPJC_79_290_2_AccImp_Obs_2.cxx++
+B_EPJC_79_290_2_AccImp_Obs_0()
+B_EPJC_79_290_2_AccImp_Obs_1()
+B_EPJC_79_290_2_AccImp_Obs_2()
+
+// --- Flag == 3
+B_EPJC_79_290(3)
+
+// --- Flag == 4
+B_EPJC_79_290(4)
+
+.L B_EPJC_79_290_4_AccImp_Obs_0.cxx++
+B_EPJC_79_290_4_AccImp_Obs_0()
+
+.L B_EPJC_79_290_x3_x4_CorPai.cxx++
+.L B_EPJC_79_290_x3_x5_CorPai.cxx++
+.L B_EPJC_79_290_x4_x1_CorPai.cxx++
+.L B_EPJC_79_290_x4_x5_CorPai.cxx++
+B_EPJC_79_290_x3_x4_CorPai()
+B_EPJC_79_290_x3_x5_CorPai()
+B_EPJC_79_290_x4_x1_CorPai()
+B_EPJC_79_290_x4_x5_CorPai()
+
+.L B_EPJC_79_290_x3_x4_DisPai.cxx++
+.L B_EPJC_79_290_x3_x5_DisPai.cxx++
+.L B_EPJC_79_290_x4_x5_DisPai.cxx++
+B_EPJC_79_290_x3_x4_DisPai()
+B_EPJC_79_290_x3_x5_DisPai()
+B_EPJC_79_290_x4_x5_DisPai()
+
+.q
+
+

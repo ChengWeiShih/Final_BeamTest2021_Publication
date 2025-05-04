@@ -1,0 +1,6 @@
+gSystem->Load("libBlue.so");
+
+.L B_ATLAS_CONF_2012_134.cxx++
+B_ATLAS_CONF_2012_134(0)
+
+.q

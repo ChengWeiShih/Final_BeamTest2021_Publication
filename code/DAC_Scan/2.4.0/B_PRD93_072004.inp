@@ -1,0 +1,56 @@
+gSystem->Load("libBlue.so");
+
+//------------------------------------
+// Flag == 0
+//------------------------------------
+
+.L B_PRD93_072004.cxx++
+B_PRD93_072004(0)
+
+.L B_PRD93_072004_0_x3_x6_DisPai.cxx++
+.L B_PRD93_072004_0_x6_x9_DisPai.cxx++
+B_PRD93_072004_0_x3_x6_DisPai()
+B_PRD93_072004_0_x6_x9_DisPai()
+
+.L B_PRD93_072004_0_DisRes_Obs_0.cxx++
+B_PRD93_072004_0_DisRes_Obs_0()
+
+.L B_PRD93_072004_0_AccImp_Obs_0.cxx++
+B_PRD93_072004_0_AccImp_Obs_0()
+
+.L B_PRD93_072004_0_PosWei_DisRes_Obs_0.cxx++
+B_PRD93_072004_0_PosWei_DisRes_Obs_0()
+
+//------------------------------------
+// Flag == 1
+//------------------------------------
+
+B_PRD93_072004(1)
+
+.L B_PRD93_072004_1_x3_x6_DisPai.cxx++
+.L B_PRD93_072004_1_x6_x9_DisPai.cxx++
+B_PRD93_072004_1_x3_x6_DisPai()
+B_PRD93_072004_1_x6_x9_DisPai()
+
+.L B_PRD93_072004_1_DisRes_Obs_0.cxx++
+B_PRD93_072004_1_DisRes_Obs_0()
+
+.L B_PRD93_072004_1_AccImp_Obs_0.cxx++
+B_PRD93_072004_1_AccImp_Obs_0()
+
+.L B_PRD93_072004_1_PosWei_DisRes_Obs_0.cxx++
+B_PRD93_072004_1_PosWei_DisRes_Obs_0()
+
+//------------------------------------
+// Flag == 2
+//------------------------------------
+
+B_PRD93_072004(2)
+.L B_PRD93_072004_2_DisRes_Obs_0.cxx++
+.L B_PRD93_072004_2_DisRes_Obs_1.cxx++
+.L B_PRD93_072004_2_DisRes_Obs_2.cxx++
+B_PRD93_072004_2_DisRes_Obs_0()
+B_PRD93_072004_2_DisRes_Obs_1()
+B_PRD93_072004_2_DisRes_Obs_2()
+
+.q

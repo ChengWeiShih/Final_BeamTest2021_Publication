@@ -1,0 +1,10 @@
+gSystem->Load("libBlue.so");
+
+.L B_Peelles.cxx++
+B_Peelles(0)
+B_Peelles(1)
+B_Peelles(2)
+B_Peelles(3)
+B_Peelles(4)
+B_Peelles(5)
+.q

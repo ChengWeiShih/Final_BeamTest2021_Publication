@@ -1,0 +1,11 @@
+gSystem->Load("libBlue.so");
+
+.L B_PRD79_092005.cxx++
+B_PRD79_092005(0)
+B_PRD79_092005(1)
+
+B_PRD79_092005(2)
+.L B_PRD79_092005_2_x0_x1_DisPai.cxx++
+B_PRD79_092005_2_x0_x1_DisPai()
+
+.q

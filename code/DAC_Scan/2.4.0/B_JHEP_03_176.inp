@@ -1,0 +1,6 @@
+gSystem->Load("libBlue.so");
+
+.L B_JHEP_03_176.cxx++
+B_JHEP_03_176(0)
+
+.q

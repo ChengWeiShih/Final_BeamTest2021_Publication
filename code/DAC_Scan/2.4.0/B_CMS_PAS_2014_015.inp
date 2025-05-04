@@ -1,0 +1,29 @@
+gSystem->Load("libBlue.so");
+
+.L B_CMS_PAS_2014_015.cxx++
+
+B_CMS_PAS_2014_015(0)
+.L B_CMS_PAS_2014_015_0_DisRes_Obs_0.cxx++
+B_CMS_PAS_2014_015_0_DisRes_Obs_0()
+.L B_CMS_PAS_2014_015_0_AccImp_Obs_0.cxx++
+B_CMS_PAS_2014_015_0_AccImp_Obs_0()
+
+B_CMS_PAS_2014_015(1)
+.L B_CMS_PAS_2014_015_1_DisRes_Obs_0.cxx++
+B_CMS_PAS_2014_015_1_DisRes_Obs_0()
+.L B_CMS_PAS_2014_015_1_AccImp_Obs_0.cxx++
+B_CMS_PAS_2014_015_1_AccImp_Obs_0()
+
+B_CMS_PAS_2014_015(2)
+B_CMS_PAS_2014_015(3)
+B_CMS_PAS_2014_015(4)
+
+B_CMS_PAS_2014_015(5)
+.L B_CMS_PAS_2014_015_5_DisRes_Obs_0.cxx++
+B_CMS_PAS_2014_015_5_DisRes_Obs_0()
+.L B_CMS_PAS_2014_015_5_DisRes_Obs_1.cxx++
+B_CMS_PAS_2014_015_5_DisRes_Obs_1()
+.L B_CMS_PAS_2014_015_5_DisRes_Obs_2.cxx++
+B_CMS_PAS_2014_015_5_DisRes_Obs_2()
+
+.q

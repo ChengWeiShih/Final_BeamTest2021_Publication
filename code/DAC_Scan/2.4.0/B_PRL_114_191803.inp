@@ -1,0 +1,16 @@
+gSystem->Load("libBlue.so");
+
+.L B_PRL_114_191803.cxx++
+B_PRL_114_191803(0)
+
+B_PRL_114_191803(1)
+B_PRL_114_191803(2)
+
+.L B_PRL_114_191803_x0_x2_DisPai.cxx++
+B_PRL_114_191803_x0_x2_DisPai()
+
+.L B_PRL_114_191803_x1_x3_DisPai.cxx++
+B_PRL_114_191803_x1_x3_DisPai()
+
+
+.q

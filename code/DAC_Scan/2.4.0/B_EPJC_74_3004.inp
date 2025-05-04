@@ -1,0 +1,18 @@
+gSystem->Load("libBlue.so");
+
+.L B_EPJC_74_3004.cxx++
+B_EPJC_74_3004(0)
+B_EPJC_74_3004(1)
+B_EPJC_74_3004(2)
+B_EPJC_74_3004(3)
+
+.L B_EPJC_74_3004_A_DisRes_Obs_0.cxx++
+.L B_EPJC_74_3004_B_DisRes_Obs_0.cxx++
+.L B_EPJC_74_3004_C_DisRes_Obs_0.cxx++
+.L B_EPJC_74_3004_D_DisRes_Obs_0.cxx++
+B_EPJC_74_3004_A_DisRes_Obs_0()
+B_EPJC_74_3004_B_DisRes_Obs_0()
+B_EPJC_74_3004_C_DisRes_Obs_0()
+B_EPJC_74_3004_D_DisRes_Obs_0()
+
+.q

@@ -1,0 +1,26 @@
+gSystem->Load("libBlue.so");
+
+.L B_arXiv_1608_01881.cxx++
+B_arXiv_1608_01881(0)
+
+.L B_arXiv_1608_01881_DisRes_Obs_0.cxx++
+B_arXiv_1608_01881_DisRes_Obs_0()
+
+B_arXiv_1608_01881(1)
+.L B_arXiv_1608_01881_1_AccImp_Obs_0.cxx++
+B_arXiv_1608_01881_1_AccImp_Obs_0()
+
+B_arXiv_1608_01881(2)
+.L B_arXiv_1608_01881_2_DisRes_Obs_0.cxx++
+.L B_arXiv_1608_01881_2_DisRes_Obs_1.cxx++
+.L B_arXiv_1608_01881_2_DisRes_Obs_2.cxx++
+.L B_arXiv_1608_01881_2_DisRes_Obs_3.cxx++
+B_arXiv_1608_01881_2_DisRes_Obs_0()
+B_arXiv_1608_01881_2_DisRes_Obs_1()
+B_arXiv_1608_01881_2_DisRes_Obs_2()
+B_arXiv_1608_01881_2_DisRes_Obs_3()
+
+B_arXiv_1608_01881(3)
+B_arXiv_1608_01881(4)
+
+.q
