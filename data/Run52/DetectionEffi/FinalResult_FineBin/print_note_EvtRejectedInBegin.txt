@@ -1,0 +1,83 @@
+root [1] FinalResult_Run52()
+input_file_vec.size() : 1
+/data4/chengwei/Geant4/INTT_simulation/G4/for_CW/Final_BeamTest2021_Publication/data/Run52/DetectionEffi/Data_DetectionEffi_Run52_Column8_BaseLine.root
+all_good_event_count : 42956
+all_total_event_count : 43099
+all_Final_Effi : 99.6682, all_Final_Effi_StatErrorUp : 0.0276749, all_Final_Effi_StatErrorDown : 0.0300764
+
+input_file_vec.size() : 1
+/data4/chengwei/Geant4/INTT_simulation/G4/for_CW/Final_BeamTest2021_Publication/data/Run52/DetectionEffi/Data_DetectionEffi_Run52_Column9_VaryColumn.root
+all_good_event_count : 44198
+all_total_event_count : 44301
+all_Final_Effi : 99.7675, all_Final_Effi_StatErrorUp : 0.0228501, all_Final_Effi_StatErrorDown : 0.0252079
+
+input_file_vec.size() : 1
+/data4/chengwei/Geant4/INTT_simulation/G4/for_CW/Final_BeamTest2021_Publication/data/Run52/DetectionEffi/Data_DetectionEffi_Run52_Column8_VaryPosCutLarge.root
+all_good_event_count : 42972
+all_total_event_count : 43099
+all_Final_Effi : 99.7053, all_Final_Effi_StatErrorUp : 0.0260813, all_Final_Effi_StatErrorDown : 0.0284906
+
+input_file_vec.size() : 1
+/data4/chengwei/Geant4/INTT_simulation/G4/for_CW/Final_BeamTest2021_Publication/data/Run52/DetectionEffi/Data_DetectionEffi_Run52_Column8_VaryPosCutSmall.root
+all_good_event_count : 42895
+all_total_event_count : 43099
+all_Final_Effi : 99.5267, all_Final_Effi_StatErrorUp : 0.0330446, all_Final_Effi_StatErrorDown : 0.0354236
+
+input_file_vec.size() : 1
+/data4/chengwei/Geant4/INTT_simulation/G4/for_CW/Final_BeamTest2021_Publication/data/Run52/DetectionEffi/Data_DetectionEffi_Run52_Column8_VarySlopeCutLarge.root
+all_good_event_count : 43638
+all_total_event_count : 43795
+all_Final_Effi : 99.6415, all_Final_Effi_StatErrorUp : 0.0285366, all_Final_Effi_StatErrorDown : 0.0308943
+
+input_file_vec.size() : 1
+/data4/chengwei/Geant4/INTT_simulation/G4/for_CW/Final_BeamTest2021_Publication/data/Run52/DetectionEffi/Data_DetectionEffi_Run52_Column8_VarySlopeCutSmall.root
+all_good_event_count : 41748
+all_total_event_count : 41877
+all_Final_Effi : 99.692, all_Final_Effi_StatErrorUp : 0.0270519, all_Final_Effi_StatErrorDown : 0.02953
+
+input_file_vec.size() : 1
+/data4/chengwei/Geant4/INTT_simulation/G4/for_CW/Final_BeamTest2021_Publication/data/Run52/DetectionEffi/Data_DetectionEffi_Run52_Column8_VaryBoundaryCutLarge.root
+all_good_event_count : 42956
+all_total_event_count : 43099
+all_Final_Effi : 99.6682, all_Final_Effi_StatErrorUp : 0.0276749, all_Final_Effi_StatErrorDown : 0.0300764
+
+input_file_vec.size() : 1
+/data4/chengwei/Geant4/INTT_simulation/G4/for_CW/Final_BeamTest2021_Publication/data/Run52/DetectionEffi/Data_DetectionEffi_Run52_Column8_VaryBoundaryCutSmall.root
+all_good_event_count : 42956
+all_total_event_count : 43099
+all_Final_Effi : 99.6682, all_Final_Effi_StatErrorUp : 0.0276749, all_Final_Effi_StatErrorDown : 0.0300764
+
+Info in <TCanvas::Print>: pdf file /data4/chengwei/Geant4/INTT_simulation/G4/for_CW/Final_BeamTest2021_Publication/data/Run52/DetectionEffi/FinalResult_Fine/Variation_VaryColumn.pdf has been created
+leg_header_in : Column variation, Run52
+all_MaxVariationUp: 0.000996244
+all_MaxVariationDown: 0
+MaxVariationUp middle: 0.00097, 0.00062, 0.00132, 0.00000, 0.00000, 0.00000, 0.00055, 0.00319, 0.00294, 0.00477, 0.00302, 0.00154, 
+MaxVariationDown middle: 0.00000, 0.00000, 0.00000, 0.00202, 0.00066, 0.00203, 0.00000, 0.00000, 0.00000, 0.00000, 0.00000, 0.00000, 
+
+Info in <TCanvas::Print>: pdf file /data4/chengwei/Geant4/INTT_simulation/G4/for_CW/Final_BeamTest2021_Publication/data/Run52/DetectionEffi/FinalResult_Fine/Variation_VaryPosCut.pdf has been created
+leg_header_in : Residual variation, Run52
+all_MaxVariationUp: 0.000372474
+all_MaxVariationDown: 0.00142006
+MaxVariationUp middle: 0.00000, 0.00047, 0.00023, 0.00024, 0.00025, 0.00054, 0.00054, 0.00057, 0.00030, 0.00064, 0.00034, 0.00051, 
+MaxVariationDown middle: 0.00074, 0.00141, 0.00117, 0.00049, 0.00225, 0.00243, 0.00054, 0.00257, 0.00119, 0.00191, 0.00135, 0.00103, 
+
+Info in <TCanvas::Print>: pdf file /data4/chengwei/Geant4/INTT_simulation/G4/for_CW/Final_BeamTest2021_Publication/data/Run52/DetectionEffi/FinalResult_Fine/Variation_VarySlopeCut.pdf has been created
+leg_header_in : Slope cut variation, Run52
+all_MaxVariationUp: 0.000238283
+all_MaxVariationDown: 0.00026783
+MaxVariationUp middle: 0.00005, 0.00041, 0.00004, 0.00018, 0.00018, 0.00070, 0.00000, 0.00015, 0.00050, 0.00047, 0.00025, 0.00050, 
+MaxVariationDown middle: 0.00008, 0.00042, 0.00010, 0.00020, 0.00044, 0.00019, 0.00049, 0.00048, 0.00024, 0.00023, 0.00029, 0.00048, 
+
+Info in <TCanvas::Print>: pdf file /data4/chengwei/Geant4/INTT_simulation/G4/for_CW/Final_BeamTest2021_Publication/data/Run52/DetectionEffi/FinalResult_Fine/Variation_VaryBoundaryCut.pdf has been created
+leg_header_in : Boundary cut variation, Run52
+all_MaxVariationUp: 0
+all_MaxVariationDown: 0
+MaxVariationUp middle: 0.00000, 0.00000, 0.00000, 0.00000, 0.00000, 0.00000, 0.00000, 0.00000, 0.00000, 0.00000, 0.00000, 0.00000, 
+MaxVariationDown middle: 0.00000, 0.00000, 0.00000, 0.00000, 0.00000, 0.00000, 0.00000, 0.00000, 0.00000, 0.00000, 0.00000, 0.00000, 
+
+Info in <TCanvas::Print>: pdf file /data4/chengwei/Geant4/INTT_simulation/G4/for_CW/Final_BeamTest2021_Publication/data/Run52/DetectionEffi/FinalResult_Fine/SummaryRatio_VariationToBaseline.pdf has been created
+Info in <TCanvas::Print>: pdf file /data4/chengwei/Geant4/INTT_simulation/G4/for_CW/Final_BeamTest2021_Publication/data/Run52/DetectionEffi/FinalResult_Fine/Final_Detection_Efficiency.pdf has been created
+Final Result : 
+Detection Efficiency : 99.6682
+Statistical Uncertainty : 0.0276749 - 0.0300764
+Systematic Uncertainty  : 0.108635 - 0.14403
