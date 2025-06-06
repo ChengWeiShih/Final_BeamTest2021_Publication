@@ -330,8 +330,8 @@ void clustering(int index/*TString file_name*/) // by analyzing the tree_both
 	// TString file_name = "BeamData_20211210-2043_0_filter";
 	//the direction of the data 
 	//todo : for different runs, change here
-	TString file_name = Form("run%d_no_clone_filter_all", index);
-	TString folder_direction = "/data4/chengwei/Geant4/INTT_simulation/G4/for_CW/Final_BeamTest2021_Publication/data/Run64";
+	TString file_name = Form("run%d_no_clone_filter_all_v5", index);
+	TString folder_direction = "/data4/chengwei/Geant4/INTT_simulation/G4/for_CW/Final_BeamTest2021_Publication/data/DAC_Scan";
 	//this line creates a folder to save all the informations and plot of this root file 
 
 	TFile *f1 = new TFile (Form("%s/%s.root", folder_direction.Data(), file_name.Data()), "read");

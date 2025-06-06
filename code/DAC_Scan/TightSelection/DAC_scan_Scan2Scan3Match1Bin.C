@@ -200,7 +200,7 @@ void DAC_scan_Scan2Scan3Match1Bin()
 	bool ShowReducedChi2 = false;
 
 	TString folder_direction = "/data4/chengwei/Geant4/INTT_simulation/G4/for_CW/Final_BeamTest2021_Publication/data/DAC_Scan";
-	TString output_directory = folder_direction + "/DACScan_out_Scan2Scan3Match1Bin";
+	TString output_directory = folder_direction + "/TightSelection/DACScan_out_Scan2Scan3Match1Bin";
 	system(Form("mkdir -p %s",output_directory.Data()));
 
 	SetsPhenixStyle();
@@ -1050,8 +1050,7 @@ void DAC_scan_Scan2Scan3Match1Bin()
 						double ndf = 1.;
 						double ReducedChiSquare = ChiSquare/ndf;
 
-						// double final_weight_average_error = (ReducedChiSquare > 1) ? sqrt(ReducedChiSquare)*weight_average_error : weight_average_error;
-						double final_weight_average_error = weight_average_error;
+						double final_weight_average_error = (ReducedChiSquare > 1) ? sqrt(ReducedChiSquare)*weight_average_error : weight_average_error;
 
 						std::cout<<"layer: "<<i1<<", scan_i: "<<i<<", bin: "<<i2<<", temp_original_content: "<<temp_original_content<<", temp_coming_content: "<<temp_coming_content<<", weight_average: "<<weight_average<<std::endl;
 						std::cout<<"layer: "<<i1<<", scan_i: "<<i<<", bin: "<<i2<<", temp_original_error: "<<temp_original_error<<", temp_coming_error: "<<temp_coming_error<<", weight_average_error: "<<weight_average_error<<std::endl;

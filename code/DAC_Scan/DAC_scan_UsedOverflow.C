@@ -187,7 +187,7 @@ double SingleGaus(double *x, double *par)
 	return gaus_bkg_eq;
 }
 
-void DAC_scan_Scan2Scan3Match1Bin()
+void DAC_scan_UsedOverflow()
 {
 	std::pair<int,int> column_range_pair = {9, 11}; // note : use 1 to 13 coordination, column: {9, 10, 11}
 	std::pair<double,double> fit_range_pair = {8, 140};
@@ -200,7 +200,7 @@ void DAC_scan_Scan2Scan3Match1Bin()
 	bool ShowReducedChi2 = false;
 
 	TString folder_direction = "/data4/chengwei/Geant4/INTT_simulation/G4/for_CW/Final_BeamTest2021_Publication/data/DAC_Scan";
-	TString output_directory = folder_direction + "/DACScan_out_Scan2Scan3Match1Bin";
+	TString output_directory = folder_direction + "/DACScan_out_UsedOverflow";
 	system(Form("mkdir -p %s",output_directory.Data()));
 
 	SetsPhenixStyle();
@@ -239,6 +239,10 @@ void DAC_scan_Scan2Scan3Match1Bin()
 	// TH1D * DAC_hist_adc[3][8];
 	TH1D * DAC_hist_bin[3][8];
 	TH1D * DAC_hist_combine[3][8];
+
+	TH1D * DAC_hist_bin_NoOverflow[3][8];
+	TH1D * DAC_hist_combine_NoOverflow[3][8];
+
 	TH1D * DAC_hist_all[3];
 	for (int i1=0; i1<3; i1++)
 	{
@@ -258,6 +262,23 @@ void DAC_scan_Scan2Scan3Match1Bin()
 			DAC_hist_combine[i1][i]->SetMarkerSize(0.3);
 
 			DAC_hist_combine[i1][i]->GetXaxis()->SetTitle("DAC value");
+
+
+
+			// DAC_hist_bin_NoOverflow[i1][i] = new TH1D ("",Form("DAC Scan l%i, %i",i1,i),8,8+20*i,40+20*i);//is not used.
+			DAC_hist_bin_NoOverflow[i1][i] = new TH1D ("",Form("Scan-%d, Layer %d;HitAdc;Entries",i,i1),8,0,8);//consider bin (adc) only
+			DAC_hist_bin_NoOverflow[i1][i]->SetLineColor( TColor::GetColor(Form("%s",color_code_2[7].Data())) );
+			DAC_hist_bin_NoOverflow[i1][i]->SetLineWidth(2);
+
+			// DAC_hist_combine_NoOverflow[i1][i] = new TH1D ("",Form("DAC Scan combine l%i %i",i1,i),50,0,200);//include the real adc setting
+			DAC_hist_combine_NoOverflow[i1][i] = new TH1D ("",Form(""),50,0,200);//include the real adc setting 
+			DAC_hist_combine_NoOverflow[i1][i]->SetLineColor(TColor::GetColor(Form("%s",color_code_2[i].Data())));
+			DAC_hist_combine_NoOverflow[i1][i]->GetYaxis()->SetRangeUser(0,Yaxis_max);
+			DAC_hist_combine_NoOverflow[i1][i]->GetYaxis()->SetTitle("Entries (A.U.)");
+			DAC_hist_combine_NoOverflow[i1][i]->SetLineWidth(2);
+			DAC_hist_combine_NoOverflow[i1][i]->SetMarkerSize(0.3);
+
+			DAC_hist_combine_NoOverflow[i1][i]->GetXaxis()->SetTitle("DAC value");
 
 		}	
 
@@ -608,7 +629,7 @@ void DAC_scan_Scan2Scan3Match1Bin()
 					for (int i3=0; i3<layer->size(); i3++)
 					{	
 						//only use one the chip ID from the event profile
-						if (Nhit->at(i3) == 1 && nominal_setting_map[cluster_adc->at(i3)] != 7)
+						if (Nhit->at(i3) == 1)
 						{	
 							
 							// std::cout<<i3<<", aaa, "<<cluster_adc->at(i3)<<", "<<nominal_setting_map[cluster_adc->at(i3)]<<std::endl;
@@ -617,6 +638,11 @@ void DAC_scan_Scan2Scan3Match1Bin()
 							{
 								DAC_hist_bin[layer->at(i3)][i]->Fill(nominal_setting_map[cluster_adc->at(i3)]);
 								DAC_hist_combine[layer->at(i3)][i]->Fill(adc_setting_run[i][nominal_setting_map[cluster_adc->at(i3)]]);
+
+								if (nominal_setting_map[cluster_adc->at(i3)] != 7) {
+									DAC_hist_bin_NoOverflow[layer->at(i3)][i]->Fill(nominal_setting_map[cluster_adc->at(i3)]);
+									DAC_hist_combine_NoOverflow[layer->at(i3)][i]->Fill(adc_setting_run[i][nominal_setting_map[cluster_adc->at(i3)]]);
+								}
 							}
 								
 							
@@ -676,23 +702,23 @@ void DAC_scan_Scan2Scan3Match1Bin()
 	}
 
 	// note : removing the second overlapped bin of scan2
-	DAC_hist_bin[0][2]->SetBinContent(7,0);
-	DAC_hist_bin[0][2]->SetBinError(7,0);
+	// DAC_hist_bin[0][2]->SetBinContent(7,0);
+	// DAC_hist_bin[0][2]->SetBinError(7,0);
 	
-	DAC_hist_bin[1][2]->SetBinContent(7,0);
-	DAC_hist_bin[1][2]->SetBinError(7,0);
+	// DAC_hist_bin[1][2]->SetBinContent(7,0);
+	// DAC_hist_bin[1][2]->SetBinError(7,0);
 
-	DAC_hist_bin[2][2]->SetBinContent(7,0);
-	DAC_hist_bin[2][2]->SetBinError(7,0);
+	// DAC_hist_bin[2][2]->SetBinContent(7,0);
+	// DAC_hist_bin[2][2]->SetBinError(7,0);
 
-	DAC_hist_combine[0][2]->SetBinContent(19,0);
-	DAC_hist_combine[0][2]->SetBinError(19,0);
+	// DAC_hist_combine[0][2]->SetBinContent(19,0);
+	// DAC_hist_combine[0][2]->SetBinError(19,0);
 
-	DAC_hist_combine[1][2]->SetBinContent(19,0);
-	DAC_hist_combine[1][2]->SetBinError(19,0);
+	// DAC_hist_combine[1][2]->SetBinContent(19,0);
+	// DAC_hist_combine[1][2]->SetBinError(19,0);
 
-	DAC_hist_combine[2][2]->SetBinContent(19,0);
-	DAC_hist_combine[2][2]->SetBinError(19,0);
+	// DAC_hist_combine[2][2]->SetBinContent(19,0);
+	// DAC_hist_combine[2][2]->SetBinError(19,0);
 
 	// c1->Print( Form("%s/DAC_scan_matrix.pdf(",output_directory.Data()) );
 	for (int i=0; i<3; i++)
@@ -750,22 +776,23 @@ void DAC_scan_Scan2Scan3Match1Bin()
 	}
 
 	int selected_scan = 3; // todo: change the selected scan
-	for (int i1 = 0; i1 < 3; i1++)
+	for (int i1 = 0; i1 < selected_scan; i1++)
 	{
-		double scan3_max_bin_content = DAC_hist_combine[i1][selected_scan] -> GetBinContent(DAC_hist_combine[i1][selected_scan]->GetMaximumBin()); 
+		// double scan3_max_bin_content = DAC_hist_combine[i1][selected_scan] -> GetBinContent(DAC_hist_combine[i1][selected_scan]->GetMaximumBin()); 
+		double scan3_max_bin_content = DAC_hist_combine_NoOverflow[i1][selected_scan] -> GetBinContent(DAC_hist_combine_NoOverflow[i1][selected_scan]->GetMaximumBin()); 
 		DAC_hist_combine[i1][selected_scan]->Scale(sig_peak_content/scan3_max_bin_content);
+		DAC_hist_combine_NoOverflow[i1][selected_scan]->Scale(sig_peak_content/scan3_max_bin_content);
 
 		for (int scan_i = selected_scan; scan_i > 0; scan_i--)
 		{
+			
+			// note : adc5, adc6 and adc7 bin of the previous hist {0 to 7}
+			previous_content = 
+				DAC_hist_combine[i1][scan_i-1]->GetBinContent(3+scan_i*5) + 
+				DAC_hist_combine[i1][scan_i-1]->GetBinContent(4+scan_i*5) + 
+				DAC_hist_combine[i1][scan_i-1]->GetBinContent(5+scan_i*5);
 
-			if (scan_i == selected_scan){
-				previous_content = DAC_hist_combine[i1][scan_i-1]->GetBinContent(3+scan_i*5);// note : adc5 and adc6 bin of the previous hist
-				next_content     = DAC_hist_combine[i1][scan_i]  ->GetBinContent(3+scan_i*5);// note : adc0 and adc1 bin of the next hist  --> this 
-			}
-			else{
-				previous_content = DAC_hist_combine[i1][scan_i-1]->GetBinContent(3+scan_i*5)+DAC_hist_combine[i1][scan_i-1]->GetBinContent(4+scan_i*5);// note : adc5 and adc6 bin of the previous hist
-				next_content     = DAC_hist_combine[i1][scan_i]  ->GetBinContent(3+scan_i*5)+DAC_hist_combine[i1][scan_i]  ->GetBinContent(4+scan_i*5);// note : adc0 and adc1 bin of the next hist  --> this 
-			}
+			next_content     = DAC_hist_combine[i1][scan_i]  -> Integral();// note : adc0 and adc1 bin of the next hist  --> this 
 
 			
 
@@ -779,15 +806,21 @@ void DAC_scan_Scan2Scan3Match1Bin()
 			}
 
 			DAC_hist_combine[i1][scan_i - 1] -> Scale(scale_weight);
+			DAC_hist_combine_NoOverflow[i1][scan_i - 1] -> Scale(scale_weight);
 
 			previous_content = 0;
 			next_content = 0;
 		}
 
 		for (int scan_i = selected_scan; scan_i < 7; scan_i++)
-		{
-			previous_content = DAC_hist_combine[i1][scan_i]->GetBinContent(8+scan_i*5)+DAC_hist_combine[i1][scan_i]->GetBinContent(9+scan_i*5); //note : adc5 and adc6 bin of the previous hist ---> this
-			next_content     = DAC_hist_combine[i1][scan_i+1]->GetBinContent(8+scan_i*5)+DAC_hist_combine[i1][scan_i+1]->GetBinContent(9+scan_i*5); //note : adc0 and adc1 bin of the next hist  
+		{	
+			//note : adc5 and adc6 bin of the previous hist ---> this
+			previous_content = 
+				DAC_hist_combine[i1][scan_i]->GetBinContent(8+scan_i*5) + 
+				DAC_hist_combine[i1][scan_i]->GetBinContent(9+scan_i*5) +
+				DAC_hist_combine[i1][scan_i]->GetBinContent(10+scan_i*5); 
+
+			next_content     = DAC_hist_combine[i1][scan_i+1]->Integral(); //note : adc0 and adc1 bin of the next hist  
 
 			std::cout<<"layer: "<<i1<<", scan_i: "<<scan_i<<", previous_content: "<<previous_content<<", next_content: "<<next_content<<std::endl;
 
@@ -799,6 +832,7 @@ void DAC_scan_Scan2Scan3Match1Bin()
 			}
 
 			DAC_hist_combine[i1][scan_i + 1] -> Scale(scale_weight);
+			DAC_hist_combine_NoOverflow[i1][scan_i + 1] -> Scale(scale_weight);
 
 			previous_content = 0;
 			next_content = 0;
@@ -826,6 +860,31 @@ void DAC_scan_Scan2Scan3Match1Bin()
 
 		c2->Print( Form("%s/l%d_DAC_scan_overlap.pdf",output_directory.Data(), i1) );		
 		c2 -> Clear();
+
+		// note : remove overflow bin
+		for (int scan_i = 0; scan_i < 8; scan_i++)
+		{
+			DAC_hist_combine_NoOverflow[i1][scan_i]->GetYaxis()->SetRangeUser(0,Yaxis_max);
+			DAC_hist_combine_NoOverflow[i1][scan_i]->SetStats(0);
+
+			if (scan_i == 0){
+				DAC_hist_combine_NoOverflow[i1][scan_i]->Draw("hist");
+				DAC_hist_combine_NoOverflow[i1][scan_i]->Draw("ep same");
+			}
+			else
+			{
+				DAC_hist_combine_NoOverflow[i1][scan_i]->Draw("hist same");	
+				DAC_hist_combine_NoOverflow[i1][scan_i]->Draw("ep same");	
+			}
+		}
+
+		leg->Draw("same");
+		ltx->DrawLatex(0.38, 0.88, Form("#it{#bf{sPHENIX INTT}} Beam Test 2021")); 
+
+		c2->Print( Form("%s/l%d_DAC_scan_overlap_NoOverflowBin.pdf",output_directory.Data(), i1) );		
+		c2 -> Clear();
+
+
 	}
 
 	// c2->Clear();
@@ -1026,12 +1085,12 @@ void DAC_scan_Scan2Scan3Match1Bin()
 		{	
 			for (int i2=1; i2<51; i2++)
 			{
-				if (DAC_hist_combine[i1][i]->GetBinContent(i2)!=0)
+				if (DAC_hist_combine_NoOverflow[i1][i]->GetBinContent(i2)!=0)
 				{
 					if (DAC_hist_all[i1]->GetBinContent(i2)==0)
 					{
-						DAC_hist_all[i1]->SetBinContent(i2,DAC_hist_combine[i1][i]->GetBinContent(i2));
-						DAC_hist_all[i1]->SetBinError(i2,DAC_hist_combine[i1][i]->GetBinError(i2));
+						DAC_hist_all[i1]->SetBinContent(i2,DAC_hist_combine_NoOverflow[i1][i]->GetBinContent(i2));
+						DAC_hist_all[i1]->SetBinError(i2,DAC_hist_combine_NoOverflow[i1][i]->GetBinError(i2));
 					}
 					else 
 					{	
@@ -1039,8 +1098,8 @@ void DAC_scan_Scan2Scan3Match1Bin()
 						double temp_original_error   = DAC_hist_all[i1]->GetBinError(i2);
 						double temp_original_weight  = 1./pow(temp_original_error,2);
 
-						double temp_coming_content = DAC_hist_combine[i1][i]->GetBinContent(i2);
-						double temp_coming_error   = DAC_hist_combine[i1][i]->GetBinError(i2);
+						double temp_coming_content = DAC_hist_combine_NoOverflow[i1][i]->GetBinContent(i2);
+						double temp_coming_error   = DAC_hist_combine_NoOverflow[i1][i]->GetBinError(i2);
 						double temp_coming_weight  = 1./pow(temp_coming_error,2);
 
 						double weight_average = (temp_original_content*temp_original_weight + temp_coming_content*temp_coming_weight)/(temp_original_weight + temp_coming_weight);

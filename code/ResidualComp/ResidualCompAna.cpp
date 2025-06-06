@@ -304,7 +304,7 @@ double ResidualCompAna::Get_l0l1_slope(){
 }
 
 TH1D * ResidualCompAna::Sub_Get_l0l1_slope_hist(){
-    TH1D * h1D_l0l1_slope_temp = new TH1D("",";Slope (L1 - L0);Entries",50,-0.05,0.05);
+    TH1D * h1D_l0l1_slope_temp = new TH1D("",";Slope (L1 - L0);Entries",100,-0.05,0.05);
     h1D_l0l1_slope_temp -> Reset("ICESM");
 
     int count_1 = 0;

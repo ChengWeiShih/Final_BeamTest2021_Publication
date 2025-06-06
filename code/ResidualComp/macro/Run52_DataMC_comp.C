@@ -9,8 +9,9 @@ int Run52_DataMC_comp()
 
     std::string data_input_directory = "/data4/chengwei/Geant4/INTT_simulation/G4/for_CW/Final_BeamTest2021_Publication/data/Run52";
     std::string data_input_filename = "run52_no_clone_filter_all_clusters.root";
-    std::string data_output_directory = data_input_directory + "/ResidualComp//Output";
+    std::string data_output_directory = data_input_directory + "/ResidualComp/Output";
     std::string data_output_file_name_suffix = "test1";
+    int data_selected_column = 8; // note : 1 to 13;
 
     ResidualCompAna * Run52Data = new ResidualCompAna(
         true,
@@ -20,7 +21,7 @@ int Run52_DataMC_comp()
         data_output_directory,
         data_output_file_name_suffix,
 
-        8 // Selected_Column_in, // note : 1 to 13;
+        data_selected_column // Selected_Column_in, // note : 1 to 13;
          // l1_alignment_correction_in,
          // l0l1_slope_correction_in,
          // ClusPhiSize_cut_in,
@@ -46,6 +47,7 @@ int Run52_DataMC_comp()
     std::string MC_input_filename = "cluster_information_offset-0.0000_adcinfo_SingleTrigger.root";
     std::string MC_output_directory = MC_input_directory ;
     std::string MC_output_file_name_suffix = "test1";
+    int MC_selected_Column = 11; // note : 1 to 13;
 
     ResidualCompAna * Run52MC = new ResidualCompAna(
         false,
@@ -55,7 +57,7 @@ int Run52_DataMC_comp()
         MC_output_directory,
         MC_output_file_name_suffix,
 
-        11 // Selected_Column_in, // note : 1 to 13;
+        MC_selected_Column // Selected_Column_in, // note : 1 to 13;
          // l1_alignment_correction_in,
          // l0l1_slope_correction_in,
          // ClusPhiSize_cut_in,
@@ -78,15 +80,15 @@ int Run52_DataMC_comp()
     // Division : ---------------------------------------------------------------------------------------------------------------------------    
 
 
-    pair<double,double> ratio_Y_range_pair = {-3. + 1, 3 + 1};
-    TString MC_selected_Column = "U11";
+    pair<double,double> ratio_Y_range_pair = {0., 4.};
+    // TString MC_selected_Column_string = Form("U%d",MC_selected_Column);
 
     // vector<TString> titles_scattering_vec = {"Scattering [slope_{l2l1} - slope_{l1l0}]","A.U."};
-    // TString plot_scattering_name = Form("DataRun52U8_MC%s_scattering_",MC_selected_Column.Data());
+    // TString plot_scattering_name = Form("DataRun52U8_MC%s_scattering_",MC_selected_Column_string.Data());
     // dataMC_comp (data_scattering_hist, MC_scattering_hist, MC_folder_direction , plot_scattering_name, titles_scattering_vec, ratio_Y_range_pair,true, false);
     
     vector<TString> titles_residual_vec = {"L1 - (L2L0 interpolation) [mm]","Entries (A.U.)"};
-    TString plot_residual_name = Form("DataRun52U8_MC%s_residual_",MC_selected_Column.Data());
+    TString plot_residual_name = Form("DataRun52U%d_MCU%d_residual_", data_selected_column, MC_selected_Column);
     dataMC_comp (data_h1D_l1_residual, MC_h1D_l1_residual, MC_output_directory , plot_residual_name, titles_residual_vec, ratio_Y_range_pair,true, false);
 
     Run52Data -> EndRun();

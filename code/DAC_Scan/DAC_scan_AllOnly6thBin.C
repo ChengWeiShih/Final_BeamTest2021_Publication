@@ -164,11 +164,14 @@ double Func_Langaus_bkg(double *x, double *par)
 
 	// double gaussian_eq  = par[4]*( 1/( par[5]* sqrt(2*TMath::Pi()) ) ) * TMath::Exp( -1*( pow(x[0]-par[6],2)/(2*pow(par[5],2)) ) );
 	
-	double exp_bkg_eq = par[4] * TMath::Exp(par[5] * (x[0] + par[6]));
+	// double exp_bkg_eq = par[4] * TMath::Exp(par[5] * (x[0] + par[6]));
+	// double gaus_bkg_eq = par[7]*TMath::Gaus(x[0],0,par[8]);
 
-	double gaus_bkg_eq = par[7]*TMath::Gaus(x[0],0,par[8]);
+	double gaus_bkg_eq1 = par[4]*TMath::Gaus(x[0],0,par[5]);
+	double gaus_bkg_eq2 = par[6]*TMath::Gaus(x[0],0,par[7]);
 
-	return signal + exp_bkg_eq + gaus_bkg_eq;
+	// return signal + exp_bkg_eq + gaus_bkg_eq;
+	return signal + gaus_bkg_eq1 + gaus_bkg_eq2;
 }
 
 double SingleExp(double *x, double *par)
@@ -187,20 +190,25 @@ double SingleGaus(double *x, double *par)
 	return gaus_bkg_eq;
 }
 
-void DAC_scan_Scan2Scan3Match1Bin()
+void DAC_scan_AllOnly6thBin()
 {
 	std::pair<int,int> column_range_pair = {9, 11}; // note : use 1 to 13 coordination, column: {9, 10, 11}
-	std::pair<double,double> fit_range_pair = {8, 140};
-	std::pair<double,double> signal_purity_range = {40, 210};
+	std::pair<double,double> fit_range_pair = {8, 160};
+	std::pair<double,double> signal_purity_range = {15, 210};
+
+	std::pair<double, double> fit_SigOnly_range_pair = {60, 160};
+
 	bool DSE_evt_remove = true;
 	double Yaxis_max = 2200;
 	double sig_peak_content = 1000;
 	bool SetFirstBinToZero = false;
 	bool rough_event_selection = true;
-	bool ShowReducedChi2 = false;
+	bool ShowReducedChi2 = true;
+
+	double L0_BinContent_const = 0.19316;
 
 	TString folder_direction = "/data4/chengwei/Geant4/INTT_simulation/G4/for_CW/Final_BeamTest2021_Publication/data/DAC_Scan";
-	TString output_directory = folder_direction + "/DACScan_out_Scan2Scan3Match1Bin";
+	TString output_directory = folder_direction + "/DACScan_out_AllOnly6thBin";
 	system(Form("mkdir -p %s",output_directory.Data()));
 
 	SetsPhenixStyle();
@@ -281,6 +289,11 @@ void DAC_scan_Scan2Scan3Match1Bin()
 	leg_final -> SetBorderSize(0);
 	leg_final -> SetMargin(0.2);
 	leg_final -> SetTextSize(0.025);
+
+	TLegend * leg_final_opt1 = new TLegend(0.55,0.78,0.8,0.84);
+	leg_final_opt1 -> SetBorderSize(0);
+	leg_final_opt1 -> SetMargin(0.2);
+	leg_final_opt1 -> SetTextSize(0.025);
 
 	TLatex * ltx_matrix = new TLatex();
     ltx_matrix->SetNDC();
@@ -608,7 +621,7 @@ void DAC_scan_Scan2Scan3Match1Bin()
 					for (int i3=0; i3<layer->size(); i3++)
 					{	
 						//only use one the chip ID from the event profile
-						if (Nhit->at(i3) == 1 && nominal_setting_map[cluster_adc->at(i3)] != 7)
+						if (Nhit->at(i3) == 1 && nominal_setting_map[cluster_adc->at(i3)] != 7 && nominal_setting_map[cluster_adc->at(i3)] != 6)
 						{	
 							
 							// std::cout<<i3<<", aaa, "<<cluster_adc->at(i3)<<", "<<nominal_setting_map[cluster_adc->at(i3)]<<std::endl;
@@ -618,8 +631,14 @@ void DAC_scan_Scan2Scan3Match1Bin()
 								DAC_hist_bin[layer->at(i3)][i]->Fill(nominal_setting_map[cluster_adc->at(i3)]);
 								DAC_hist_combine[layer->at(i3)][i]->Fill(adc_setting_run[i][nominal_setting_map[cluster_adc->at(i3)]]);
 							}
-								
-							
+						}
+
+						if (Nhit->at(i3) == 1 && nominal_setting_map[cluster_adc->at(i3)] == 6 && i==7) {
+							if (chip->at(i3) >= column_range_pair.first && chip->at(i3) <= column_range_pair.second)
+							{
+								DAC_hist_bin[layer->at(i3)][i]->Fill(nominal_setting_map[cluster_adc->at(i3)]);
+								DAC_hist_combine[layer->at(i3)][i]->Fill(adc_setting_run[i][nominal_setting_map[cluster_adc->at(i3)]]);
+							}
 						}
 						
 					}//end of i3, the the loop of one event 
@@ -674,25 +693,6 @@ void DAC_scan_Scan2Scan3Match1Bin()
 		DAC_hist_combine[2][0]->SetBinError(3,0);
 
 	}
-
-	// note : removing the second overlapped bin of scan2
-	DAC_hist_bin[0][2]->SetBinContent(7,0);
-	DAC_hist_bin[0][2]->SetBinError(7,0);
-	
-	DAC_hist_bin[1][2]->SetBinContent(7,0);
-	DAC_hist_bin[1][2]->SetBinError(7,0);
-
-	DAC_hist_bin[2][2]->SetBinContent(7,0);
-	DAC_hist_bin[2][2]->SetBinError(7,0);
-
-	DAC_hist_combine[0][2]->SetBinContent(19,0);
-	DAC_hist_combine[0][2]->SetBinError(19,0);
-
-	DAC_hist_combine[1][2]->SetBinContent(19,0);
-	DAC_hist_combine[1][2]->SetBinError(19,0);
-
-	DAC_hist_combine[2][2]->SetBinContent(19,0);
-	DAC_hist_combine[2][2]->SetBinError(19,0);
 
 	// c1->Print( Form("%s/DAC_scan_matrix.pdf(",output_directory.Data()) );
 	for (int i=0; i<3; i++)
@@ -752,22 +752,17 @@ void DAC_scan_Scan2Scan3Match1Bin()
 	int selected_scan = 3; // todo: change the selected scan
 	for (int i1 = 0; i1 < 3; i1++)
 	{
-		double scan3_max_bin_content = DAC_hist_combine[i1][selected_scan] -> GetBinContent(DAC_hist_combine[i1][selected_scan]->GetMaximumBin()); 
-		DAC_hist_combine[i1][selected_scan]->Scale(sig_peak_content/scan3_max_bin_content);
+		double scan3_integral = DAC_hist_bin[i1][selected_scan] -> Integral(1,6); // note : the first bin to the 6th bin 
+
+		// double scan3_max_bin_content = DAC_hist_combine[i1][selected_scan] -> GetBinContent(DAC_hist_combine[i1][selected_scan]->GetMaximumBin()); 
+		// DAC_hist_combine[i1][selected_scan]->Scale(sig_peak_content/scan3_max_bin_content);
+
+		DAC_hist_combine[i1][selected_scan]->Scale( (1./scan3_integral) * ( sig_peak_content / L0_BinContent_const));
 
 		for (int scan_i = selected_scan; scan_i > 0; scan_i--)
 		{
-
-			if (scan_i == selected_scan){
-				previous_content = DAC_hist_combine[i1][scan_i-1]->GetBinContent(3+scan_i*5);// note : adc5 and adc6 bin of the previous hist
-				next_content     = DAC_hist_combine[i1][scan_i]  ->GetBinContent(3+scan_i*5);// note : adc0 and adc1 bin of the next hist  --> this 
-			}
-			else{
-				previous_content = DAC_hist_combine[i1][scan_i-1]->GetBinContent(3+scan_i*5)+DAC_hist_combine[i1][scan_i-1]->GetBinContent(4+scan_i*5);// note : adc5 and adc6 bin of the previous hist
-				next_content     = DAC_hist_combine[i1][scan_i]  ->GetBinContent(3+scan_i*5)+DAC_hist_combine[i1][scan_i]  ->GetBinContent(4+scan_i*5);// note : adc0 and adc1 bin of the next hist  --> this 
-			}
-
-			
+			previous_content = DAC_hist_combine[i1][scan_i-1]->GetBinContent(3+scan_i*5);// note : adc5 and adc6 bin of the previous hist
+			next_content     = DAC_hist_combine[i1][scan_i]  ->GetBinContent(3+scan_i*5);// note : adc0 and adc1 bin of the next hist  --> this 
 
 			std::cout<<"layer: "<<i1<<", scan_i: "<<scan_i<<", previous_content: "<<previous_content<<", next_content: "<<next_content<<std::endl;
 
@@ -786,8 +781,8 @@ void DAC_scan_Scan2Scan3Match1Bin()
 
 		for (int scan_i = selected_scan; scan_i < 7; scan_i++)
 		{
-			previous_content = DAC_hist_combine[i1][scan_i]->GetBinContent(8+scan_i*5)+DAC_hist_combine[i1][scan_i]->GetBinContent(9+scan_i*5); //note : adc5 and adc6 bin of the previous hist ---> this
-			next_content     = DAC_hist_combine[i1][scan_i+1]->GetBinContent(8+scan_i*5)+DAC_hist_combine[i1][scan_i+1]->GetBinContent(9+scan_i*5); //note : adc0 and adc1 bin of the next hist  
+			previous_content = DAC_hist_combine[i1][scan_i]->GetBinContent(8+scan_i*5); //note : adc5 and adc6 bin of the previous hist ---> this
+			next_content     = DAC_hist_combine[i1][scan_i+1]->GetBinContent(8+scan_i*5); //note : adc0 and adc1 bin of the next hist  
 
 			std::cout<<"layer: "<<i1<<", scan_i: "<<scan_i<<", previous_content: "<<previous_content<<", next_content: "<<next_content<<std::endl;
 
@@ -973,12 +968,21 @@ void DAC_scan_Scan2Scan3Match1Bin()
 	// func_fit -> SetParLimits  (2, 0.0, (float)(nSignal*2.5));
 	// func_fit -> SetParLimits  (3, 0.0,      20.);
 
+	TF1 *LandGausComp_opt1 = new TF1("LandGausComp_opt1", Func_Langaus, 0, 200,4);
+	LandGausComp_opt1 -> SetLineColor(TColor::GetColor("#F5321D"));
+	LandGausComp_opt1 -> SetLineWidth(2);
+
 	TF1 *LandGausComp = new TF1("LandGausComp", Func_Langaus, 0, 200,4);
 	LandGausComp -> SetLineColor(61);
 	LandGausComp -> SetLineStyle(2);
 	LandGausComp -> SetLineWidth(2);
 
-	TF1 * BkgComp = new TF1("BkgComp", SingleExp, 0, 200,3);
+	// TF1 * BkgComp = new TF1("BkgComp", SingleExp, 0, 200,3);
+	// BkgComp -> SetLineColor(93);
+	// BkgComp -> SetLineStyle(2);
+	// BkgComp -> SetLineWidth(2);
+
+	TF1 * BkgComp = new TF1("BkgComp", SingleGaus, 0, 200,3);
 	BkgComp -> SetLineColor(93);
 	BkgComp -> SetLineStyle(2);
 	BkgComp -> SetLineWidth(2);
@@ -988,22 +992,33 @@ void DAC_scan_Scan2Scan3Match1Bin()
 	BkgComp2 -> SetLineStyle(2);
 	BkgComp2 -> SetLineWidth(2);
 
-	TF1 * land_gaus_bkg_fit = new TF1("land_gaus_bkg_fit", Func_Langaus_bkg, 0, 200, 9);
+	TF1 * land_gaus_bkg_fit = new TF1("land_gaus_bkg_fit", Func_Langaus_bkg, 0, 200, 8);
 	land_gaus_bkg_fit -> SetLineColor(TColor::GetColor("#F5321D"));
 	land_gaus_bkg_fit -> SetLineWidth(2);
 	land_gaus_bkg_fit -> SetParameters(
-		8, 73.8,  26407, 12,
-		1000,-0.5, -5,
-		10, 20
+		3.47183e+00, 7.19476e+01,  4.14353e+04, 1.32139e+01,
+		3.52018e+04, 3.94777e+00,
+		1.32515e+02, 2.00000e+01
 	);
 
-	land_gaus_bkg_fit -> SetParLimits(7,0,100000);
-	land_gaus_bkg_fit -> SetParLimits(8,0,20);
+	// land_gaus_bkg_fit -> SetParameters(
+	// 	8, 73.8,  26407, 12,
+	// 	1000,-0.5, -5,
+	// 	10, 20
+	// );
+
+	land_gaus_bkg_fit -> SetParLimits(4,0,100000000);
+	land_gaus_bkg_fit -> SetParLimits(5,0,20);
+
+	land_gaus_bkg_fit -> SetParLimits(6,0,100000000);
+	land_gaus_bkg_fit -> SetParLimits(7,0,20);
 
 	leg_final->AddEntry(land_gaus_bkg_fit, "Total Fit", "l");
 	leg_final->AddEntry(LandGausComp, "Signal (Landau #otimes Gaussian)", "l");
-	leg_final->AddEntry(BkgComp, "Background (Exponential)", "l");
-	leg_final->AddEntry(BkgComp2, "Background (Gaussian)", "l");
+	leg_final->AddEntry(BkgComp, "Background (Gaussian1)", "l");
+	leg_final->AddEntry(BkgComp2, "Background (Gaussian2)", "l");
+
+	leg_final_opt1->AddEntry(LandGausComp_opt1, "Fit (Landau #otimes Gaussian)", "l");
 
 	// double width_v, width_e, mip_v, mip_e, area1_v, area1_e, gsig1_v, gsig1_e;
 	// float  chi1, con1;
@@ -1051,7 +1066,8 @@ void DAC_scan_Scan2Scan3Match1Bin()
 						double ReducedChiSquare = ChiSquare/ndf;
 
 						// double final_weight_average_error = (ReducedChiSquare > 1) ? sqrt(ReducedChiSquare)*weight_average_error : weight_average_error;
-						double final_weight_average_error = weight_average_error;
+						// double final_weight_average_error = weight_average_error;
+						double final_weight_average_error = (temp_original_error + temp_coming_error)/2.;
 
 						std::cout<<"layer: "<<i1<<", scan_i: "<<i<<", bin: "<<i2<<", temp_original_content: "<<temp_original_content<<", temp_coming_content: "<<temp_coming_content<<", weight_average: "<<weight_average<<std::endl;
 						std::cout<<"layer: "<<i1<<", scan_i: "<<i<<", bin: "<<i2<<", temp_original_error: "<<temp_original_error<<", temp_coming_error: "<<temp_coming_error<<", weight_average_error: "<<weight_average_error<<std::endl;
@@ -1084,6 +1100,12 @@ void DAC_scan_Scan2Scan3Match1Bin()
 		// 	cout<<" layer : "<<i1<<" Bin : "<<i4+1<<" Center : "<<DAC_hist_all[i1]->GetBinCenter(i4+1)<<" Width : "<<DAC_hist_all[i1]->GetBinWidth(i4+1)<<" Entry : "<<DAC_hist_all[i1]->GetBinContent(i4+1)<<endl;
 		// }
 
+		land_gaus_bkg_fit -> SetParameters(
+			3.47183e+00, 7.19476e+01,  4.14353e+04, 1.32139e+01,
+			3.52018e+04, 3.94777e+00,
+			1.32515e+02, 2.00000e+01
+		);
+
 		if (i1==0)
 		{
 			// DAC_hist_all[i1] -> Fit(func_fit, "L0", "", 60, 140);
@@ -1100,6 +1122,8 @@ void DAC_scan_Scan2Scan3Match1Bin()
 			DAC_hist_all[i1] -> Fit(land_gaus_bkg_fit, "", "", fit_range_pair.first, fit_range_pair.second);
 		}
 
+		land_gaus_bkg_fit->Write(Form("land_gaus_bkg_fit_%d",i1) );
+
 		LandGausComp->SetParameters(
 			land_gaus_bkg_fit->GetParameter(0),
 			land_gaus_bkg_fit->GetParameter(1),
@@ -1107,24 +1131,39 @@ void DAC_scan_Scan2Scan3Match1Bin()
 			land_gaus_bkg_fit->GetParameter(3)
 		);
 
+		// BkgComp->SetParameters(
+		// 	land_gaus_bkg_fit->GetParameter(4),
+		// 	land_gaus_bkg_fit->GetParameter(5),
+		// 	land_gaus_bkg_fit->GetParameter(6)
+		// );
+
 		BkgComp->SetParameters(
 			land_gaus_bkg_fit->GetParameter(4),
-			land_gaus_bkg_fit->GetParameter(5),
-			land_gaus_bkg_fit->GetParameter(6)
-		);
-
-		BkgComp2->SetParameters(
-			land_gaus_bkg_fit->GetParameter(7),
 			0,
-			land_gaus_bkg_fit->GetParameter(8)
+			land_gaus_bkg_fit->GetParameter(5)
 			// land_gaus_bkg_fit->GetParameter(9)
 		);
 
+		std::cout<<"Bkg Gaus1: "<<land_gaus_bkg_fit->GetParameter(4)<<", "<<land_gaus_bkg_fit->GetParameter(5)<<std::endl;
+		std::cout<<"Bkg Gaus2: "<<land_gaus_bkg_fit->GetParameter(6)<<", "<<land_gaus_bkg_fit->GetParameter(7)<<std::endl;
+		double weight_average_Gaus_width = (land_gaus_bkg_fit->GetParameter(4) * land_gaus_bkg_fit->GetParameter(5) + land_gaus_bkg_fit->GetParameter(6) * land_gaus_bkg_fit->GetParameter(7)) / (land_gaus_bkg_fit->GetParameter(4) + land_gaus_bkg_fit->GetParameter(6));
+		std::cout<<"weight_average_Gaus_width: "<<weight_average_Gaus_width<<std::endl;
+		std::cout<<"Land MPV: "<<land_gaus_bkg_fit->GetParameter(1)<<std::endl;
+		std::cout<<"Signal component, MPV: "<<land_gaus_bkg_fit->GetParameter(1)<<", S/N : "<<land_gaus_bkg_fit->GetParameter(1) / weight_average_Gaus_width<<std::endl;
+
+		BkgComp2->SetParameters(
+			land_gaus_bkg_fit->GetParameter(6),
+			0,
+			land_gaus_bkg_fit->GetParameter(7)
+			// land_gaus_bkg_fit->GetParameter(9)
+		);
+
+		// land_gaus_bkg_fit -> Draw("lsame");
 		LandGausComp->Draw("lsame");
 		BkgComp->Draw("lsame");
 		BkgComp2->Draw("lsame");
 
-		DAC_hist_all[i1]->Draw("ep same");
+		// DAC_hist_all[i1]->Draw("ep same");
 
 		leg_final->Draw("same");
 
@@ -1187,6 +1226,30 @@ void DAC_scan_Scan2Scan3Match1Bin()
 
 		c2->Print( Form("%s/l%d_DAC_scan_all.pdf",output_directory.Data(), i1) ); 
 		c2 -> Clear();
+
+
+
+
+		// Division: ------------------------------------------------------------------------------------------------------------------------
+		c2 -> cd();
+		DAC_hist_all[i1]->Draw("ep");
+
+		LandGausComp_opt1 -> SetParameters(
+			3.47183e+00, 7.19476e+01,  4.14353e+04, 1.32139e+01
+		);
+
+		DAC_hist_all[i1] -> Fit(LandGausComp_opt1, "", "", fit_SigOnly_range_pair.first, fit_SigOnly_range_pair.second);
+
+
+		if (ShowReducedChi2){ltx_fit->DrawLatex(0.45, 0.72, Form("#chi^{2} / NDF : %.2f / %d = %.2f",LandGausComp_opt1->GetChisquare(),LandGausComp_opt1->GetNDF(), LandGausComp_opt1->GetChisquare()/LandGausComp_opt1->GetNDF()));}
+		ltx_fit->DrawLatex(0.45, 0.68 + ltx_fit_Y_offset, Form("Landau MPV: %.2f #pm %.2f",LandGausComp_opt1->GetParameter(1), LandGausComp_opt1->GetParError(1)));
+
+		ltx->DrawLatex(0.38, 0.88, Form("#it{#bf{sPHENIX INTT}} Beam Test 2021"));
+
+		leg_final_opt1->Draw("same");
+		
+		c2->Print( Form("%s/l%d_DAC_scan_all_opt1.pdf",output_directory.Data(), i1) );
+
 	}
 	// c2->Print( Form("%s/DAC_scan_all.pdf)",output_directory.Data()) );
 

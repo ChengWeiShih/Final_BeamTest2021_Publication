@@ -187,7 +187,7 @@ double SingleGaus(double *x, double *par)
 	return gaus_bkg_eq;
 }
 
-void DAC_scan_Scan2Scan3Match1Bin()
+void DAC_scan()
 {
 	std::pair<int,int> column_range_pair = {9, 11}; // note : use 1 to 13 coordination, column: {9, 10, 11}
 	std::pair<double,double> fit_range_pair = {8, 140};
@@ -200,7 +200,7 @@ void DAC_scan_Scan2Scan3Match1Bin()
 	bool ShowReducedChi2 = false;
 
 	TString folder_direction = "/data4/chengwei/Geant4/INTT_simulation/G4/for_CW/Final_BeamTest2021_Publication/data/DAC_Scan";
-	TString output_directory = folder_direction + "/DACScan_out_Scan2Scan3Match1Bin";
+	TString output_directory = folder_direction + "/TightSelection/DACScan_out";
 	system(Form("mkdir -p %s",output_directory.Data()));
 
 	SetsPhenixStyle();
@@ -337,6 +337,8 @@ void DAC_scan_Scan2Scan3Match1Bin()
 		{180, 6},
 		{210, 7}
 	};
+
+	double actual_xpos[3] = {0,29.552,59.104};
 
 	// std::vector<std::vector<int>> adc_setting_run_vec = {	
 	// 	{8   ,12 ,16 ,20 ,24 ,28 ,32 ,36 ,40},
@@ -589,10 +591,31 @@ void DAC_scan_Scan2Scan3Match1Bin()
 					else if (layer->at(i3) == 2){l2_Clus_count++;}
 				}
 
+				// note: each layer can only have 1 or zero cluster
 				if (l0_Clus_count > 1 || l1_Clus_count > 1 || l2_Clus_count > 1)
 				{
 					continue;
 				}
+
+				// note : total number of clusters in the event should be 2 or 3
+				if (layer->size() != 2 && layer->size() != 3) {
+					continue;
+				}
+
+				// note : the two clusters should be from the same column
+				if (layer->size() == 2) {
+					if (chip->at(0) != chip->at(1)) {continue;}
+
+					if ( fabs( (position->at(1) - position->at(0)) / actual_xpos[int(fabs(layer->at(1) - layer->at(0)))] ) < 0.01 ) {continue;}
+				}
+
+				// note : the two clusters should be from the same column
+				if (layer->size() == 3) {
+					if ( chip->at(0) != chip->at(1) || chip->at(0) != chip->at(2) || chip->at(1) != chip->at(2) ) {continue;}
+
+					
+				}
+
 			}
 			
 
@@ -675,25 +698,6 @@ void DAC_scan_Scan2Scan3Match1Bin()
 
 	}
 
-	// note : removing the second overlapped bin of scan2
-	DAC_hist_bin[0][2]->SetBinContent(7,0);
-	DAC_hist_bin[0][2]->SetBinError(7,0);
-	
-	DAC_hist_bin[1][2]->SetBinContent(7,0);
-	DAC_hist_bin[1][2]->SetBinError(7,0);
-
-	DAC_hist_bin[2][2]->SetBinContent(7,0);
-	DAC_hist_bin[2][2]->SetBinError(7,0);
-
-	DAC_hist_combine[0][2]->SetBinContent(19,0);
-	DAC_hist_combine[0][2]->SetBinError(19,0);
-
-	DAC_hist_combine[1][2]->SetBinContent(19,0);
-	DAC_hist_combine[1][2]->SetBinError(19,0);
-
-	DAC_hist_combine[2][2]->SetBinContent(19,0);
-	DAC_hist_combine[2][2]->SetBinError(19,0);
-
 	// c1->Print( Form("%s/DAC_scan_matrix.pdf(",output_directory.Data()) );
 	for (int i=0; i<3; i++)
 	{	
@@ -757,17 +761,8 @@ void DAC_scan_Scan2Scan3Match1Bin()
 
 		for (int scan_i = selected_scan; scan_i > 0; scan_i--)
 		{
-
-			if (scan_i == selected_scan){
-				previous_content = DAC_hist_combine[i1][scan_i-1]->GetBinContent(3+scan_i*5);// note : adc5 and adc6 bin of the previous hist
-				next_content     = DAC_hist_combine[i1][scan_i]  ->GetBinContent(3+scan_i*5);// note : adc0 and adc1 bin of the next hist  --> this 
-			}
-			else{
-				previous_content = DAC_hist_combine[i1][scan_i-1]->GetBinContent(3+scan_i*5)+DAC_hist_combine[i1][scan_i-1]->GetBinContent(4+scan_i*5);// note : adc5 and adc6 bin of the previous hist
-				next_content     = DAC_hist_combine[i1][scan_i]  ->GetBinContent(3+scan_i*5)+DAC_hist_combine[i1][scan_i]  ->GetBinContent(4+scan_i*5);// note : adc0 and adc1 bin of the next hist  --> this 
-			}
-
-			
+			previous_content = DAC_hist_combine[i1][scan_i-1]->GetBinContent(3+scan_i*5)+DAC_hist_combine[i1][scan_i-1]->GetBinContent(4+scan_i*5);// note : adc5 and adc6 bin of the previous hist
+			next_content     = DAC_hist_combine[i1][scan_i]  ->GetBinContent(3+scan_i*5)+DAC_hist_combine[i1][scan_i]  ->GetBinContent(4+scan_i*5);// note : adc0 and adc1 bin of the next hist  --> this 
 
 			std::cout<<"layer: "<<i1<<", scan_i: "<<scan_i<<", previous_content: "<<previous_content<<", next_content: "<<next_content<<std::endl;
 
@@ -1045,6 +1040,7 @@ void DAC_scan_Scan2Scan3Match1Bin()
 
 						double weight_average = (temp_original_content*temp_original_weight + temp_coming_content*temp_coming_weight)/(temp_original_weight + temp_coming_weight);
 						double weight_average_error = sqrt(1./(temp_original_weight + temp_coming_weight));
+						// double weight_average_error = (temp_original_weight + temp_coming_weight) / 2.;
 
 						double ChiSquare = pow(temp_original_content - weight_average,2)/pow(temp_original_error,2) + pow(temp_coming_content - weight_average,2)/pow(temp_coming_error,2);
 						double ndf = 1.;

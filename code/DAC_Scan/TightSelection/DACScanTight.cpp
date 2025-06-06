@@ -1,6 +1,6 @@
-#include "DetectionEffiAna.h"
+#include "DACScanTight.h"
 
-DetectionEffiAna::DetectionEffiAna(
+DACScanTight::DACScanTight(
     bool isData_in,
     int runnumber_in,
     std::string input_directory_in,
@@ -38,7 +38,7 @@ DetectionEffiAna::DetectionEffiAna(
     PrepareHistFit();
 }
 
-void DetectionEffiAna::PrepareInputData() {
+void DACScanTight::PrepareInputData() {
 
     file_in = TFile::Open(Form("%s/%s", input_directory.c_str(), input_filename.c_str() ));
     if (!file_in || file_in->IsZombie()) {
@@ -117,14 +117,14 @@ void DetectionEffiAna::PrepareInputData() {
     
 }
 
-void DetectionEffiAna::PrepareOutputFileName() {
+void DACScanTight::PrepareOutputFileName() {
     
     if (output_file_name_suffix.size() > 0 && output_file_name_suffix[0] != '_') {
         output_file_name_suffix = "_" + output_file_name_suffix;
     }
 
     output_filename = (isData) ? "Data" : "MC";
-    output_filename += "_DetectionEffi";
+    output_filename += "_DACScanTight";
     output_filename += Form("_Run%d", runnumber);
     output_filename += Form("_Column%d", Selected_Column);
 
@@ -133,7 +133,7 @@ void DetectionEffiAna::PrepareOutputFileName() {
     output_filename += ".root";
 }
 
-void DetectionEffiAna::PrepareOutputFile() {
+void DACScanTight::PrepareOutputFile() {
 
     file_out = new TFile(Form("%s/%s", output_directory.c_str(), output_filename.c_str()), "RECREATE");
 
@@ -156,7 +156,7 @@ void DetectionEffiAna::PrepareOutputFile() {
     tree_out_effi -> Branch("L1BestClusSize", &L1BestClusSize);
 }
 
-void DetectionEffiAna::PrepareHistFit() {
+void DACScanTight::PrepareHistFit() {
 
     // h1D_l1_alignment_before = new TH1D("h1D_l1_alignment_before","h1D_l1_alignment_before;L1 - (L2L0 interpolation) [mm];Entries",50,-0.4,1);
     // h1D_l1_alignment_after = new TH1D("h1D_l1_alignment_after","h1D_l1_alignment_after;L1 - (L2L0 interpolation) [mm];Entries",50,-0.4,1);
@@ -208,6 +208,19 @@ void DetectionEffiAna::PrepareHistFit() {
     h2D_GoodL1Hit_ClusAdc_Corr_L0 = new TH2D("h2D_GoodL1Hit_ClusAdc_Corr_L0","h2D_GoodL1Hit_ClusAdc_Corr_L0;ClusAdc (L1);ClusAdc (L0)",100,0,1500,100,0,1500);
     h2D_GoodL1Hit_ClusAdc_Corr_L2 = new TH2D("h2D_GoodL1Hit_ClusAdc_Corr_L2","h2D_GoodL1Hit_ClusAdc_Corr_L2;ClusAdc (L1);ClusAdc (L2)",100,0,1500,100,0,1500);
 
+    h1D_GoodTrack_1HitClusAdc_L0 = new TH1D("h1D_GoodTrack_1HitClusAdc_L0","h1D_GoodTrack_1HitClusAdc_L0;Single-hit Cluster Adc (L0);Entries",8,0,8);
+    h1D_GoodTrack_1HitClusAdc_L2 = new TH1D("h1D_GoodTrack_1HitClusAdc_L2","h1D_GoodTrack_1HitClusAdc_L2;Single-hit Cluster Adc (L2);Entries",8,0,8);
+    h1D_GoodL1Hit_1HitClusAdc_L1 = new TH1D("h1D_GoodL1Hit_1HitClusAdc_L1","h1D_GoodL1Hit_1HitClusAdc_L1;Single-hit Cluster Adc (L1);Entries",8,0,8);
+
+    h2D_GoodTrack_1HitClusAdc_Pos_L0 = new TH2D("h2D_GoodTrack_1HitClusAdc_Pos_L0","h2D_GoodTrack_1HitClusAdc_Pos_L0;Single-hit Cluster Adc (L0);ClusPos [mm]",8,0,8,128,-9.984,9.984);
+    h2D_GoodTrack_1HitClusAdc_Pos_L2 = new TH2D("h2D_GoodTrack_1HitClusAdc_Pos_L2","h2D_GoodTrack_1HitClusAdc_Pos_L2;Single-hit Cluster Adc (L2);ClusPos [mm]",8,0,8,128,-9.984,9.984);
+    h2D_GoodL1Hit_1HitClusAdc_Pos_L1 = new TH2D("h2D_GoodL1Hit_1HitClusAdc_Pos_L1","h2D_GoodL1Hit_1HitClusAdc_Pos_L1;Single-hit Cluster Adc (L1);ClusPos [mm]",8,0,8,128,-9.984,9.984);
+
+    
+    h2D_raw_1HitClusAdc_Pos_L0 = new TH2D("h2D_raw_1HitClusAdc_Pos_L0","h2D_raw_1HitClusAdc_Pos_L0;Single-hit Cluster Adc (L0);ClusPos [mm]",8,0,8,128,-9.984,9.984);
+    h2D_raw_1HitClusAdc_Pos_L2 = new TH2D("h2D_raw_1HitClusAdc_Pos_L2","h2D_raw_1HitClusAdc_Pos_L2;Single-hit Cluster Adc (L2);ClusPos [mm]",8,0,8,128,-9.984,9.984);
+    h2D_raw_1HitClusAdc_Pos_L1 = new TH2D("h2D_raw_1HitClusAdc_Pos_L1","h2D_raw_1HitClusAdc_Pos_L1;Single-hit Cluster Adc (L1);ClusPos [mm]",8,0,8,128,-9.984,9.984);
+
     // Division : --------------------------------------------------------------------------------
     // note : for other study
 
@@ -251,7 +264,7 @@ void DetectionEffiAna::PrepareHistFit() {
 
 }
 
-double DetectionEffiAna::Get_l1_alignment() {
+double DACScanTight::Get_l1_alignment() {
     if(l1_alignment_correction == 0.) {
         std::cout<<"l1_alignment_correction is 0, then measure it!"<<std::endl;
 
@@ -274,7 +287,7 @@ double DetectionEffiAna::Get_l1_alignment() {
     return l1_alignment_correction;
 }
 
-TH1D * DetectionEffiAna::Sub_Get_l1_alignment_hist(){
+TH1D * DACScanTight::Sub_Get_l1_alignment_hist(){
     TH1D * h1D_l1_alignment_temp = new TH1D("",";L1 - (L2L0 interpolation) [mm];Entries",50,-0.4,1);
     h1D_l1_alignment_temp -> Reset("ICESM");
 
@@ -347,7 +360,7 @@ TH1D * DetectionEffiAna::Sub_Get_l1_alignment_hist(){
     return h1D_l1_alignment_temp;
 }
 
-double DetectionEffiAna::Get_l0l2_slope(){
+double DACScanTight::Get_l0l2_slope(){
     if(l0l2_slope_correction == 0.) {
         std::cout<<"l0l2_slope_correction is 0, then measure it!"<<std::endl;
 
@@ -370,7 +383,7 @@ double DetectionEffiAna::Get_l0l2_slope(){
     return l0l2_slope_correction;
 }
 
-TH1D* DetectionEffiAna::Sub_Get_l0l2_slope_hist() {
+TH1D* DACScanTight::Sub_Get_l0l2_slope_hist() {
     TH1D * h1D_l0l2_slope_temp = new TH1D("",";L2L0 slope;Entries",50,-0.05,0.05);
     h1D_l0l2_slope_temp -> Reset("ICESM");
 
@@ -427,7 +440,7 @@ TH1D* DetectionEffiAna::Sub_Get_l0l2_slope_hist() {
     return h1D_l0l2_slope_temp;
 }
 
-void DetectionEffiAna::GetDetectionEffi(
+void DACScanTight::GetDetectionEffi(
     double slope_cut_in, 
     double noise_hit_distance_in, // note : unit : mm
     int boundary_cut_in, 
@@ -459,6 +472,7 @@ void DetectionEffiAna::GetDetectionEffi(
         L1Good = 0;
         L1BestClusAdc = -999;
         L1BestClusSize = -999;
+        L1BestClusPos = -999;
 
         std::vector<ClusInfo> empty_ClusInfo_vec; empty_ClusInfo_vec.clear();
 
@@ -480,6 +494,31 @@ void DetectionEffiAna::GetDetectionEffi(
         h1D_selection_NLayerHit_all -> Fill(0., double(CheckedCol_L0_vec.size()));
         h1D_selection_NLayerHit_all -> Fill(1., double(CheckedCol_L1_vec.size()));
         h1D_selection_NLayerHit_all -> Fill(2., double(CheckedCol_L2_vec.size()));
+
+        for (int hit_i = 0; hit_i < CheckedCol_L0_vec.size(); hit_i++){
+            if (CheckedCol_L0_vec[hit_i].size == 1) {
+                h2D_raw_1HitClusAdc_Pos_L0 -> Fill(
+                    nominal_setting_map[CheckedCol_L0_vec[hit_i].adc], 
+                    CheckedCol_L0_vec[hit_i].pos
+                );
+            }
+        }
+        for (int hit_i = 0; hit_i < CheckedCol_L2_vec.size(); hit_i++){
+            if (CheckedCol_L2_vec[hit_i].size == 1) {
+                h2D_raw_1HitClusAdc_Pos_L2 -> Fill(
+                    nominal_setting_map[CheckedCol_L2_vec[hit_i].adc], 
+                    CheckedCol_L2_vec[hit_i].pos
+                );
+            }
+        }
+        for (int hit_i = 0; hit_i < CheckedCol_L1_vec.size(); hit_i++){
+            if (CheckedCol_L1_vec[hit_i].size == 1) {
+                h2D_raw_1HitClusAdc_Pos_L1 -> Fill(
+                    nominal_setting_map[CheckedCol_L1_vec[hit_i].adc], 
+                    CheckedCol_L1_vec[hit_i].pos + l1_alignment_correction 
+                );
+            }
+        }
 
         // note : zero cluster in adjacent chips
         if ( 
@@ -558,7 +597,18 @@ void DetectionEffiAna::GetDetectionEffi(
 
         L0L2Interpolation = ( CheckedCol_L0_vec[0].pos + CheckedCol_L2_vec[0].pos ) / 2.;
 
-        h2D_GoodTrack_ClusAdc_Corr->Fill(CheckedCol_L0_vec[0].adc, CheckedCol_L2_vec[0].adc);        
+        h2D_GoodTrack_ClusAdc_Corr->Fill(CheckedCol_L0_vec[0].adc, CheckedCol_L2_vec[0].adc);    
+
+        if (CheckedCol_L0_vec[0].size == 1) {
+            h1D_GoodTrack_1HitClusAdc_L0 -> Fill(nominal_setting_map[CheckedCol_L0_vec[0].adc]);
+            h2D_GoodTrack_1HitClusAdc_Pos_L0 -> Fill( nominal_setting_map[CheckedCol_L0_vec[0].adc], CheckedCol_L0_vec[0].pos );
+        }
+
+        if (CheckedCol_L2_vec[0].size == 1) {
+            h1D_GoodTrack_1HitClusAdc_L2 -> Fill(nominal_setting_map[CheckedCol_L2_vec[0].adc]);
+            h2D_GoodTrack_1HitClusAdc_Pos_L2 -> Fill( nominal_setting_map[CheckedCol_L2_vec[0].adc], CheckedCol_L2_vec[0].pos );
+        }
+
 
         if (CheckedCol_L1_vec.size() != 0) {
             
@@ -574,12 +624,14 @@ void DetectionEffiAna::GetDetectionEffi(
 
                     L1BestClusAdc = CheckedCol_L1_vec[clu_i].adc;
                     L1BestClusSize = CheckedCol_L1_vec[clu_i].size;
+                    L1BestClusPos = CheckedCol_L1_vec[clu_i].pos + l1_alignment_correction;
                 }
                 else if (std::abs(diff) > std::abs(this_L1Residual)) {
                     diff = this_L1Residual;
 
                     L1BestClusAdc = CheckedCol_L1_vec[clu_i].adc;
                     L1BestClusSize = CheckedCol_L1_vec[clu_i].size;
+                    L1BestClusPos = CheckedCol_L1_vec[clu_i].pos + l1_alignment_correction;
                 }
             }
 
@@ -600,6 +652,11 @@ void DetectionEffiAna::GetDetectionEffi(
 
                 h2D_GoodL1Hit_ClusAdc_Corr_L0 -> Fill(L1BestClusAdc, CheckedCol_L0_vec[0].adc);
                 h2D_GoodL1Hit_ClusAdc_Corr_L2 -> Fill(L1BestClusAdc, CheckedCol_L2_vec[0].adc);
+
+                if (L1BestClusSize == 1) {
+                    h1D_GoodL1Hit_1HitClusAdc_L1 -> Fill(nominal_setting_map[L1BestClusAdc]);
+                    h2D_GoodL1Hit_1HitClusAdc_Pos_L1 -> Fill( nominal_setting_map[L1BestClusAdc], L1BestClusPos );
+                }
             }
 
         }
@@ -637,7 +694,7 @@ void DetectionEffiAna::GetDetectionEffi(
     Final_Effi_StatErrorDown = detection_effi->GetEfficiencyErrorLow(1)*100.;
 }
 
-void DetectionEffiAna:: GetControlClusDist(
+void DACScanTight:: GetControlClusDist(
     double slope_cut_in, 
     double noise_hit_distance_in // note : unit : mm
 ){
@@ -737,7 +794,7 @@ void DetectionEffiAna:: GetControlClusDist(
 }
 
 
-void DetectionEffiAna::EndRun(){
+void DACScanTight::EndRun(){
     file_out -> cd();
     if (h1D_l1_alignment_before != nullptr) {h1D_l1_alignment_before -> Write();}
     if (h1D_l1_alignment_after != nullptr) {h1D_l1_alignment_after -> Write();}
@@ -806,6 +863,18 @@ void DetectionEffiAna::EndRun(){
     h2D_GoodTrack_ClusAdc_Corr->Write();
     h2D_GoodL1Hit_ClusAdc_Corr_L0->Write();
     h2D_GoodL1Hit_ClusAdc_Corr_L2->Write();
+
+    h1D_GoodTrack_1HitClusAdc_L0->Write();
+    h1D_GoodTrack_1HitClusAdc_L2->Write();
+    h1D_GoodL1Hit_1HitClusAdc_L1->Write();
+
+    h2D_GoodTrack_1HitClusAdc_Pos_L0->Write();
+    h2D_GoodTrack_1HitClusAdc_Pos_L2->Write();
+    h2D_GoodL1Hit_1HitClusAdc_Pos_L1->Write();
+
+    h2D_raw_1HitClusAdc_Pos_L0->Write();
+    h2D_raw_1HitClusAdc_Pos_L2->Write();
+    h2D_raw_1HitClusAdc_Pos_L1->Write();
 
     for (int i = 0; i < 3; i++){
         h1D_ClusPos_Raw[i] -> Write();

@@ -1,9 +1,6 @@
 #include "../DetectionEffiAna.h"
 R__LOAD_LIBRARY(../libDetectionEffiAna.so)
 
-#include "../DetectionEffiAna.h"
-R__LOAD_LIBRARY(../libDetectionEffiAna.so)
-
 // int Run52_Original(){
 //     std::string data_input_directory = "/data4/chengwei/Geant4/INTT_simulation/G4/for_CW/Final_BeamTest2021_Publication/data/Run52";
 //     std::string data_input_filename = "run52_no_clone_filter_all_clusters.root";
@@ -53,7 +50,7 @@ R__LOAD_LIBRARY(../libDetectionEffiAna.so)
 
 std::string data_input_directory = "/data4/chengwei/Geant4/INTT_simulation/G4/for_CW/Final_BeamTest2021_Publication/data/Run52";
 std::string data_input_filename = "run52_no_clone_filter_all_clusters.root";
-std::string data_output_directory = data_input_directory + "/DetectionEffi";
+std::string data_output_directory = data_input_directory + "/DetectionEffi_baseline700um";
 
 std::tuple<std::string, double, double, double> Run52_mother(
     std::string data_output_file_name_suffix = "BaseLine",    
@@ -115,12 +112,12 @@ int Run52() {
     string BaseLine_data_output_file_name_suffix = "BaseLine";    
     int    BaseLine_Selected_Column = 8; // note : 1 to 13,
     double BaseLine_Effi_slope_cut = 0.01; // note : slope cut
-    double BaseLine_Effi_pos_cut = 0.5; // note : noise hit distance
+    double BaseLine_Effi_pos_cut = 0.7; // note : noise hit distance
     int    BaseLine_Effi_boundary_cut = 8;// note : boundary cut
     double BaseLine_Effi_cluster_adc_value_requirement = 15; // note : cluster adc value requirement
 
     double BaseLine_ClusDist_slope_cut = 0.01; // note : slope cut
-    double BaseLine_ClusDist_pos_cut = 0.234; // note : noise hit distance
+    double BaseLine_ClusDist_pos_cut = 0.7; // note : noise hit distance
 
     bool   BaseLine_prepare_ClusDist = true;
     
@@ -159,7 +156,7 @@ int Run52() {
 
     // Division: Vary Pos Cut Large ---------------------------------------------------------------------------------
     string VaryPosCutLarge_data_output_file_name_suffix = "VaryPosCutLarge";
-    double VaryPosCutLarge_Effi_pos_cut = 0.7;
+    double VaryPosCutLarge_Effi_pos_cut = 1.0;
 
     std::tuple<std::string, double, double, double> tuple_VaryPosCutLarge = Run52_mother(
         VaryPosCutLarge_data_output_file_name_suffix, // note : changed
@@ -177,7 +174,7 @@ int Run52() {
 
     // Division: Vary Pos Cut Small ---------------------------------------------------------------------------------
     string VaryPosCutSmall_data_output_file_name_suffix = "VaryPosCutSmall";
-    double VaryPosCutSmall_Effi_pos_cut = 0.3;
+    double VaryPosCutSmall_Effi_pos_cut = 0.85;
 
     std::tuple<std::string, double, double, double> tuple_VaryPosCutSmall = Run52_mother(
         VaryPosCutSmall_data_output_file_name_suffix, // note : changed
@@ -266,6 +263,27 @@ int Run52() {
         false
     );
 
+
+    // Division: Vary SlopeCut Small ---------------------------------------------------------------------------------
+    string VarySlopeCutTight_data_output_file_name_suffix = "VarySlopeCutTight";
+    double VarySlopeCutTight_Effi_slope_cut = 0.004;
+
+    std::tuple<std::string, double, double, double> tuple_VarySlopeCutTight = Run52_mother(
+        VarySlopeCutTight_data_output_file_name_suffix, // note : changed
+        BaseLine_Selected_Column,
+        VarySlopeCutTight_Effi_slope_cut, // note : changed
+        BaseLine_Effi_pos_cut,
+        BaseLine_Effi_boundary_cut,
+        BaseLine_Effi_cluster_adc_value_requirement,
+
+        BaseLine_ClusDist_slope_cut,
+        BaseLine_ClusDist_pos_cut,
+
+        false
+    );
+
+
+
     std::cout<<"------------------------------------------------------------------------------------------------"<<std::endl;
     std::cout<<std::get<0>(tuple_BaseLine)<<", "<<std::get<1>(tuple_BaseLine)<<", "<<std::get<2>(tuple_BaseLine)<<", "<<std::get<3>(tuple_BaseLine)<<std::endl;
     std::cout<<std::endl;
@@ -283,6 +301,9 @@ int Run52() {
     
     std::cout<<std::get<0>(tuple_VaryBoundaryCutLarge)<<", "<<std::get<1>(tuple_VaryBoundaryCutLarge)<<", "<<std::get<2>(tuple_VaryBoundaryCutLarge)<<", "<<std::get<3>(tuple_VaryBoundaryCutLarge)<<std::endl;
     std::cout<<std::get<0>(tuple_VaryBoundaryCutSmall)<<", "<<std::get<1>(tuple_VaryBoundaryCutSmall)<<", "<<std::get<2>(tuple_VaryBoundaryCutSmall)<<", "<<std::get<3>(tuple_VaryBoundaryCutSmall)<<std::endl;
+    std::cout<<std::endl;
+
+    std::cout<<std::get<0>(tuple_VarySlopeCutTight)<<", "<<std::get<1>(tuple_VarySlopeCutTight)<<", "<<std::get<2>(tuple_VarySlopeCutTight)<<", "<<std::get<3>(tuple_VarySlopeCutTight)<<std::endl;
 
     return 888;
 }

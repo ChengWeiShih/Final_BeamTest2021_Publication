@@ -921,7 +921,7 @@ std::pair<double,double> CombineSyst(
 
 // note : Run52 single 
 int FinalResult_Run52() {
-    std::string mother_directory_Run52 = "/data4/chengwei/Geant4/INTT_simulation/G4/for_CW/Final_BeamTest2021_Publication/data/Run52/DetectionEffi"; 
+    std::string mother_directory_Run52 = "/data4/chengwei/Geant4/INTT_simulation/G4/for_CW/Final_BeamTest2021_Publication/data/Run52/DetectionEffi_baseline700um"; 
     std::string final_output_directory = mother_directory_Run52 + "/FinalResult";
     system(Form("mkdir -p %s", final_output_directory.c_str()));
 
@@ -1000,9 +1000,9 @@ int FinalResult_Run52() {
             VaryPosCutSmall_EffiSet
         }, // note : the first one has to be the baseline
         {
-            "Baseline (|Residual| < 0.5 mm)",
-            "|Residual| < 0.7 mm",
-            "|Residual| < 0.3 mm"
+            "Baseline (|Residual| < 0.7 mm)",
+            "|Residual| < 1.0 mm",
+            "|Residual| < 0.85 mm"
         }, // note : file_title_vec,
         "Residual variation, Run52", // note : leg_header_in,
         final_output_directory,   // note : final_output_directory,
@@ -1046,14 +1046,14 @@ int FinalResult_Run52() {
     std::pair<double,double> all_syst_unc_pair = CombineSyst(
         {
             VaryColumn_variation,
-            VaryPosCut_variation,
+            // VaryPosCut_variation,
             VarySlopeCut_variation,
             VaryBoundaryCut_variation
         }, // note : std::vector<RelativeVariationSet> RelativeVariationSet_vec
         
         {
             "Column variation",
-            "Residual cut variation",
+            // "Residual cut variation",
             "Slope cut variation",
             "Boundary cut variation"
         }, // note : std::vector<std::string> Variation_title_vec
@@ -1079,7 +1079,7 @@ int FinalResult_Run52() {
 
 // note : Run89 single 
 int FinalResult_Run89() {
-    std::string mother_directory_Run89 = "/data4/chengwei/Geant4/INTT_simulation/G4/for_CW/Final_BeamTest2021_Publication/data/Run89/DetectionEffi"; 
+    std::string mother_directory_Run89 = "/data4/chengwei/Geant4/INTT_simulation/G4/for_CW/Final_BeamTest2021_Publication/data/Run89/DetectionEffi_baseline700um"; 
     std::string final_output_directory = mother_directory_Run89 + "/FinalResult";
     system(Form("mkdir -p %s", final_output_directory.c_str()));
 
@@ -1158,9 +1158,9 @@ int FinalResult_Run89() {
             VaryPosCutSmall_EffiSet
         }, // note : the first one has to be the baseline
         {
-            "Baseline (|Residual| < 0.5 mm)",
-            "|Residual| < 0.7 mm",
-            "|Residual| < 0.3 mm"
+            "Baseline (|Residual| < 0.7 mm)",
+            "|Residual| < 1.0 mm",
+            "|Residual| < 0.85 mm"
         }, // note : file_title_vec,
         "Residual variation, Run89", // note : leg_header_in,
         final_output_directory,   // note : final_output_directory,
@@ -1204,14 +1204,14 @@ int FinalResult_Run89() {
     std::pair<double,double> all_syst_unc_pair = CombineSyst(
         {
             VaryColumn_variation,
-            VaryPosCut_variation,
+            // VaryPosCut_variation,
             VarySlopeCut_variation,
             VaryBoundaryCut_variation
         }, // note : std::vector<RelativeVariationSet> RelativeVariationSet_vec
         
         {
             "Column variation",
-            "Residual cut variation",
+            // "Residual cut variation",
             "Slope cut variation",
             "Boundary cut variation"
         }, // note : std::vector<std::string> Variation_title_vec
@@ -1238,9 +1238,9 @@ int FinalResult_Run89() {
 
 // note : Run52 + Run89 combined 
 int FinalResult_Run52Run89Comb() {
-    std::string mother_directory_Run52 = "/data4/chengwei/Geant4/INTT_simulation/G4/for_CW/Final_BeamTest2021_Publication/data/Run52/DetectionEffi";
-    std::string mother_directory_Run89 = "/data4/chengwei/Geant4/INTT_simulation/G4/for_CW/Final_BeamTest2021_Publication/data/Run89/DetectionEffi";
-    std::string final_output_directory = "/data4/chengwei/Geant4/INTT_simulation/G4/for_CW/Final_BeamTest2021_Publication/data/Run52Run89Comb/DetectionEffi";
+    std::string mother_directory_Run52 = "/data4/chengwei/Geant4/INTT_simulation/G4/for_CW/Final_BeamTest2021_Publication/data/Run52/DetectionEffi_baseline700um";
+    std::string mother_directory_Run89 = "/data4/chengwei/Geant4/INTT_simulation/G4/for_CW/Final_BeamTest2021_Publication/data/Run89/DetectionEffi_baseline700um";
+    std::string final_output_directory = "/data4/chengwei/Geant4/INTT_simulation/G4/for_CW/Final_BeamTest2021_Publication/data/Run52Run89Comb/DetectionEffi_baseline700um/FinalResult";
     system(Form("mkdir -p %s", final_output_directory.c_str()));
 
     VariationSet BaseLine_EffiSet = MakeEffiPos(
@@ -1326,9 +1326,9 @@ int FinalResult_Run52Run89Comb() {
             VaryPosCutSmall_EffiSet
         }, // note : the first one has to be the baseline
         {
-            "Baseline (|Residual| < 0.5 mm)",
-            "|Residual| < 0.7 mm",
-            "|Residual| < 0.3 mm"
+            "Baseline (|Residual| < 0.7 mm)",
+            "|Residual| < 1.0 mm",
+            "|Residual| < 0.85 mm"
         }, // note : file_title_vec,
         "Residual variation, Run52+Run89", // note : leg_header_in,
         final_output_directory,   // note : final_output_directory,
@@ -1372,14 +1372,14 @@ int FinalResult_Run52Run89Comb() {
     std::pair<double,double> all_syst_unc_pair = CombineSyst(
         {
             VaryColumn_variation,
-            VaryPosCut_variation,
+            // VaryPosCut_variation,
             VarySlopeCut_variation,
             VaryBoundaryCut_variation
         }, // note : std::vector<RelativeVariationSet> RelativeVariationSet_vec
         
         {
             "Column variation",
-            "Residual cut variation",
+            // "Residual cut variation",
             "Slope cut variation",
             "Boundary cut variation"
         }, // note : std::vector<std::string> Variation_title_vec

@@ -1,5 +1,5 @@
-#ifndef DETECTIONEFFIANA_H
-#define DETECTIONEFFIANA_H
+#ifndef DACSCANTIGHT_H
+#define DACSCANTIGHT_H
 
 #include <iostream>
 #include <string>
@@ -19,9 +19,9 @@
 
 #include "sPhenixStyle.h"
 
-class DetectionEffiAna{
+class DACScanTight{
     public:
-        DetectionEffiAna(
+        DACScanTight(
             bool isData_in,
             int runnumber_in,
             std::string input_directory_in,
@@ -176,15 +176,29 @@ class DetectionEffiAna{
         TH1D * h1D_selection_NLayerHit_EdgeExclL2 = nullptr;
         TH1D * h1D_selection_NLayerHit_SlopeCut = nullptr;
 
-        TH2D * h2D_GoodTrack_ClusAdc_Corr;
-        TH2D * h2D_GoodL1Hit_ClusAdc_Corr_L0;
-        TH2D * h2D_GoodL1Hit_ClusAdc_Corr_L2;
+        TH2D * h2D_GoodTrack_ClusAdc_Corr = nullptr;
+        TH2D * h2D_GoodL1Hit_ClusAdc_Corr_L0 = nullptr;
+        TH2D * h2D_GoodL1Hit_ClusAdc_Corr_L2 = nullptr;
+
+        TH1D * h1D_GoodTrack_1HitClusAdc_L0 = nullptr;
+        TH1D * h1D_GoodTrack_1HitClusAdc_L2 = nullptr;
+        TH1D * h1D_GoodL1Hit_1HitClusAdc_L1 = nullptr;
+
+        TH2D * h2D_GoodTrack_1HitClusAdc_Pos_L0 = nullptr;
+        TH2D * h2D_GoodTrack_1HitClusAdc_Pos_L2 = nullptr;
+        TH2D * h2D_GoodL1Hit_1HitClusAdc_Pos_L1 = nullptr;
+
+        TH2D * h2D_raw_1HitClusAdc_Pos_L0 = nullptr;
+        TH2D * h2D_raw_1HitClusAdc_Pos_L2 = nullptr;
+        TH2D * h2D_raw_1HitClusAdc_Pos_L1 = nullptr;
 
         double L0L2Interpolation;
         double L1Residual;
         bool L1Good;
         int L1BestClusAdc;
         int L1BestClusSize;
+        
+        double L1BestClusPos;
 
         double Final_Effi;
         double Final_Effi_StatErrorUp;
@@ -201,6 +215,17 @@ class DetectionEffiAna{
         // note : the actual ladder position (unit : mm), the value is no longer to be 26.1, 
         // note : since 26.1 is the gap between ladders, without the consideration of ladder thickness
         double actual_xpos[3] = {0,29.552,59.104};
+
+        std::map<int,int> nominal_setting_map = {
+            {15, 0},
+            {30, 1},
+            {60, 2},
+            {90, 3},
+            {120, 4},
+            {150, 5},
+            {180, 6},
+            {210, 7}
+        };
 
 };
 

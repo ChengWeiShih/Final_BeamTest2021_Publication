@@ -1017,12 +1017,14 @@ void DAC_scan()
 
 						double weight_average = (temp_original_content*temp_original_weight + temp_coming_content*temp_coming_weight)/(temp_original_weight + temp_coming_weight);
 						double weight_average_error = sqrt(1./(temp_original_weight + temp_coming_weight));
+						// double weight_average_error = (temp_original_weight + temp_coming_weight) / 2.;
 
 						double ChiSquare = pow(temp_original_content - weight_average,2)/pow(temp_original_error,2) + pow(temp_coming_content - weight_average,2)/pow(temp_coming_error,2);
 						double ndf = 1.;
 						double ReducedChiSquare = ChiSquare/ndf;
 
-						double final_weight_average_error = (ReducedChiSquare > 1) ? sqrt(ReducedChiSquare)*weight_average_error : weight_average_error;
+						// double final_weight_average_error = (ReducedChiSquare > 1) ? sqrt(ReducedChiSquare)*weight_average_error : weight_average_error;
+						double final_weight_average_error = weight_average_error;
 
 						std::cout<<"layer: "<<i1<<", scan_i: "<<i<<", bin: "<<i2<<", temp_original_content: "<<temp_original_content<<", temp_coming_content: "<<temp_coming_content<<", weight_average: "<<weight_average<<std::endl;
 						std::cout<<"layer: "<<i1<<", scan_i: "<<i<<", bin: "<<i2<<", temp_original_error: "<<temp_original_error<<", temp_coming_error: "<<temp_coming_error<<", weight_average_error: "<<weight_average_error<<std::endl;
