@@ -16,6 +16,8 @@ int Effi_ResidualCut() {
 	legend1 -> SetTextSize(0.050);
 	// legend1 -> SetNColumns (4);
 
+    std::pair<double, double> boundary_cut = {-6, 6}; // note : unit: mm, for run 52
+
     TFile * data_file_in = TFile::Open(Form("%s/%s", data_input_directory.c_str(), data_input_filename.c_str()));
     TTree * data_tree_in = (TTree *)data_file_in->Get("tree_effi");
     double data_L0L2Interpolation;
@@ -47,8 +49,25 @@ int Effi_ResidualCut() {
     TH1D * h1D_MC_denominator = new TH1D("h1D_MC_denominator", "h1D_MC_denominator", 1,0,1);
     TH1D * h1D_MC_numerator = new TH1D("h1D_MC_numerator", "h1D_MC_numerator", 1,0,1);
 
-    h1D_data_denominator -> SetBinContent(1, data_tree_in -> GetEntries());
-    h1D_MC_denominator -> SetBinContent(1, MC_tree_in -> GetEntries());    
+    double data_denominator = 0;
+    double MC_denominator = 0;
+
+    for (int i = 0; i < data_tree_in -> GetEntries(); i++) {
+        data_tree_in -> GetEntry(i);
+        if (data_L0L2Interpolation > boundary_cut.first && data_L0L2Interpolation < boundary_cut.second) {
+            data_denominator++;
+        }
+    }
+
+    for (int i = 0; i < MC_tree_in -> GetEntries(); i++) {
+        MC_tree_in -> GetEntry(i);
+        if (MC_L0L2Interpolation > boundary_cut.first && MC_L0L2Interpolation < boundary_cut.second) {
+            MC_denominator++;
+        }
+    }
+
+    h1D_data_denominator -> SetBinContent(1, data_denominator);
+    h1D_MC_denominator -> SetBinContent(1, MC_denominator);    
 
     for (int i = 0; i < 34; i++) {
         double cut = 0.01 + i * 0.03;// note : mm
@@ -58,14 +77,14 @@ int Effi_ResidualCut() {
 
         for (int j = 0; j < data_tree_in -> GetEntries(); j++) {
             data_tree_in -> GetEntry(j);
-            if (fabs(data_L1Residual) < cut) {
+            if (fabs(data_L1Residual) < cut && data_L0L2Interpolation > boundary_cut.first && data_L0L2Interpolation < boundary_cut.second ) {
                 data_numerator++;
             }
         }
 
         for (int j = 0; j < MC_tree_in -> GetEntries(); j++) {
             MC_tree_in -> GetEntry(j);
-            if (fabs(MC_L1Residual) < cut) {
+            if (fabs(MC_L1Residual) < cut && MC_L0L2Interpolation > boundary_cut.first && MC_L0L2Interpolation < boundary_cut.second) {
                 MC_numerator++;
             }
         }
