@@ -105,21 +105,23 @@ void dataMC_comp (TH1D* hist_data, TH1D* hist_MC, TString folder_direction, TStr
     // note : 0) is for SetGrid
     // note : 0,0) is for logY
     TPad *pad_obj = new TPad(Form("pad_obj"), "", 0.0, 0.30, 1.0, 1.0);
-    Characterize_Pad(pad_obj, 0.15, 0.1, 0.1, 0.016 , 0, 0);
+    Characterize_Pad(pad_obj, 0.15, 0.1, 0.1, 0.025 , 0, 0);
     pad_obj -> Draw();
 
+    Double_t tsize=0.05;
+
     TPad *pad_ratio = new TPad(Form("pad_ratio"), "", 0.0, 0.0, 1.0, 0.30);
-    Characterize_Pad(pad_ratio, 0.15, 0.1, 0.04, 0.350, 0, 1);
+    Characterize_Pad(pad_ratio, 0.15, 0.1, 0.0, 0.350, 0, 1);
     pad_ratio -> Draw();
 
-    TLegend *legend1 = new TLegend (0.7, 0.55, 0.85, 0.7);
+    TLegend *legend1 = new TLegend (0.6, 0.55, 0.85, 0.7);
     legend1 -> SetBorderSize(0);
 	legend1 -> SetTextSize (0.050);
 	// legend1 -> SetNColumns (4);
 
     TLatex * ltx = new TLatex();
     ltx->SetNDC();
-    ltx->SetTextSize(0.045);
+    ltx->SetTextSize(0.055);
     // ltx->SetTextAlign(31);
 
     if (linear_or_log == false) // note : linear
@@ -138,10 +140,17 @@ void dataMC_comp (TH1D* hist_data, TH1D* hist_MC, TString folder_direction, TStr
     // hist_data -> GetYaxis() -> SetRangeUser(0,1);
 
     Characterize_Hist1D(hist_MC,0,"#A08144",linear_or_log,true, "",titles_vec[0],titles_vec[1]);
+    hist_MC -> GetXaxis()->SetLabelSize(0);
+    hist_MC -> GetXaxis()->SetTitleSize(0);
+    hist_MC -> GetYaxis()->SetLabelSize(0.06);
+    hist_MC -> GetYaxis()->SetTitleSize(0.06);
+    hist_MC -> GetYaxis()->SetTitleOffset(1.16);
     // hist_MC -> GetXaxis() -> SetTitle(titles_vec[0]);
     // hist_MC -> GetYaxis() -> SetTitle(titles_vec[1]);
     // hist_MC -> SetTitle(titles_vec[2]);
     // hist_MC -> GetYaxis() -> SetRangeUser(0,1);
+
+    hist_data->Sumw2();
 
     if (statsbox_bool == false)
     {
@@ -150,15 +159,15 @@ void dataMC_comp (TH1D* hist_data, TH1D* hist_MC, TString folder_direction, TStr
     } 
 
     // note : normalize
-    hist_data->Scale(1./hist_data->Integral(-1,-1));
-    hist_MC->Scale(1./hist_MC->Integral(-1,-1));
+    hist_data->Scale(1./hist_data->Integral());
+    hist_MC->Scale(1./hist_MC->Integral());
 
     legend1 -> AddEntry (hist_data, Form("Data"),  "pl");
-    legend1 -> AddEntry (hist_MC, Form("MC"),  "f");
+    legend1 -> AddEntry (hist_MC, Form("Simulation"),  "f");
     
      
-    double Y_axis_max = (linear_or_log) ? 10 : 1;
-    hist_MC -> SetMaximum(Y_axis_max);
+    double Y_axis_max = (linear_or_log) ? 500 : 2.5;
+    hist_MC -> SetMaximum(hist_MC -> GetBinContent(hist_MC->GetMaximumBin()) * Y_axis_max);
 
 
     TH1D * hist_ratio = (TH1D*)hist_data -> Clone(); 
@@ -167,17 +176,30 @@ void dataMC_comp (TH1D* hist_data, TH1D* hist_MC, TString folder_direction, TStr
     Characterize_Rate1D(hist_ratio,1);
     hist_ratio -> SetMaximum(1.5);
     hist_ratio -> SetMinimum(0.5);
+
+    hist_ratio -> GetXaxis() -> SetLabelSize(0.14);
+    hist_ratio -> GetXaxis() -> SetTitleSize(0.14);
+    hist_ratio -> GetXaxis() -> SetTitleOffset(1.0);
+    hist_ratio -> GetYaxis() -> SetLabelSize(0.13);
+    hist_ratio -> GetYaxis() -> SetTitleSize(0.14);
+    hist_ratio -> GetYaxis() -> SetTitleOffset(0.5);
     
     pad_obj -> cd();
     hist_MC -> Draw("hist");
     hist_data -> Draw("ep same");
     legend1 -> Draw("same");
 
-    ltx->DrawLatex(0.45, 0.81, Form("#it{sPHENIX INTT} #bf{Beam Test 2021}"));
+    ltx->DrawLatex(0.37, 0.8, Form("#it{sPHENIX INTT} #bf{Beam Test 2021}"));
+
+    TLine * ratio_1_line = new TLine(hist_ratio -> GetXaxis() -> GetXmin(), 1., hist_ratio->GetXaxis()->GetXmax(), 1.);
+    ratio_1_line -> SetLineStyle(9);
+    ratio_1_line -> SetLineWidth(2);
+    ratio_1_line -> SetLineColor(2);
 
     pad_ratio -> cd();
     hist_ratio -> Draw("ep");
-
+    ratio_1_line -> Draw("lsame");
+    hist_ratio -> Draw("ep same");
 
     // TString output_plot_name = plot_name.ReplaceAll(" ","_");
     // output_plot_name = output_plot_name.ReplaceAll(",","");

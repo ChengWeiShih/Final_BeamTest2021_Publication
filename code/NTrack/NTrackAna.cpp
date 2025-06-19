@@ -225,15 +225,17 @@ void NTrackAna::Get_l1_alignment() {
     gr_typeB_l1_alignment -> SetMarkerSize(0.8);
     gr_typeB_l1_alignment -> SetMarkerColor(kBlack);
     gr_typeB_l1_alignment -> GetXaxis() -> SetTitle("Column ID");
-    gr_typeB_l1_alignment -> GetXaxis() -> SetLimits(0, 6);
-    gr_typeB_l1_alignment -> GetYaxis() -> SetTitle("l1 alignment correction (TypeB) [mm]");
+    gr_typeB_l1_alignment -> GetXaxis() -> SetLimits(1, 6);
+    gr_typeB_l1_alignment -> GetYaxis() -> SetRangeUser(-0.8,-0.3);
+    gr_typeB_l1_alignment -> GetYaxis() -> SetTitle("Layer L1 misalignment corr. (Type-B) [mm]");
 
     gr_typeA_l1_alignment -> SetMarkerStyle(20);
     gr_typeA_l1_alignment -> SetMarkerSize(0.8);
     gr_typeA_l1_alignment -> SetMarkerColor(kBlack);
     gr_typeA_l1_alignment -> GetXaxis() -> SetTitle("Column ID");
-    gr_typeA_l1_alignment -> GetXaxis() -> SetLimits(5, 14);
-    gr_typeA_l1_alignment -> GetYaxis() -> SetTitle("l1 alignment correction (TypeA) [mm]");
+    gr_typeA_l1_alignment -> GetXaxis() -> SetLimits(8, 13);
+    gr_typeA_l1_alignment -> GetYaxis() -> SetRangeUser(-0.5,-0.1);
+    gr_typeA_l1_alignment -> GetYaxis() -> SetTitle("Layer L1 misalignment corr. (Type-A) [mm]");
 
 
     gr_typeB_l1_alignment -> Fit(fit_typeB_l1_alignment, "N");
@@ -570,7 +572,7 @@ void NTrackAna::EndRun() {
         h1D_l1_alignment_after_vec[i] -> Write();
     }
 
-    TCanvas * c1 = new TCanvas("c1", "c1", 800, 600);
+    TCanvas * c1 = new TCanvas("c1", "c1", 950, 800);
     c1 -> cd();
     gr_typeB_l1_alignment -> Draw("ap");
     fit_typeB_l1_alignment -> Draw("same");

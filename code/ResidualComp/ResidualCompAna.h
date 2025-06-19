@@ -116,6 +116,9 @@ class ResidualCompAna{
         void PrepareHistFit();
         TFile * file_out;
         TTree * tree_out;
+        TTree * tree_residual_out;
+        double out_l1_residual;
+        double out_l2_residual;
         
         TH1D * h1D_l1_alignment_before = nullptr;
         TH1D * h1D_l1_alignment_after = nullptr; 

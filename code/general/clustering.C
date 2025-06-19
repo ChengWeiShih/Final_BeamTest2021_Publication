@@ -330,8 +330,17 @@ void clustering(int index/*TString file_name*/) // by analyzing the tree_both
 	// TString file_name = "BeamData_20211210-2043_0_filter";
 	//the direction of the data 
 	//todo : for different runs, change here
-	TString file_name = Form("run%d_no_clone_filter_all_v5", index);
-	TString folder_direction = "/data4/chengwei/Geant4/INTT_simulation/G4/for_CW/Final_BeamTest2021_Publication/data/DAC_Scan";
+
+	bool isHotChannelMasked = true;
+	bool isData = false;
+
+	std::string isData_text = (isData) ? "" : "MC_";
+	std::string isHotChannelMasked_text = (isHotChannelMasked) ? "HotChannelMask_" : "";
+
+
+	TString file_name = "run64_X8_Y4_1M_WithSciAlFoil_10PercentHDIMetalMaterial_BeamSmear_EMZ_20umCut_Run64DataU10Offset_L1_2.73935e-01mm_Run64DataU10TrackCandidateSlopePlusAdditionalCorrection_8.0615459-01deg_WithLeadPlate_RoughTrigger"; // Form("run%d_no_clone_filter_all_v5", index);
+	TString folder_direction = "/data4/chengwei/Geant4/INTT_simulation/G4/for_CW/Final_BeamTest2021_Publication/data/Run64/MC";
+	TString file_name_out = isData_text + "run64_" + isHotChannelMasked_text + "clusters";
 	//this line creates a folder to save all the informations and plot of this root file 
 
 	TFile *f1 = new TFile (Form("%s/%s.root", folder_direction.Data(), file_name.Data()), "read");
@@ -343,6 +352,16 @@ void clustering(int index/*TString file_name*/) // by analyzing the tree_both
 	double INTT_strip_width = 0.078;
 	double lower_section_initial = -9.945;
 	double upper_section_initial = 0.039;
+
+	
+	//Division:----------------------------------------------------------------------------------------
+	std::vector<std::string> run64_HotChannel_vec = { // note : module_chip_channel
+		"1_26_126", // note : module 1, chip 26, channel 126 (layer 0)
+		"5_19_119", // note : module 5, chip 19, channel 119 (layer 2)
+		"5_4_0"     // note : module 5, chip 4,  channel 0   (layer 2)
+	};
+	//Division:----------------------------------------------------------------------------------------
+
 
 	//title =====================================================================================================================================	
 
@@ -529,11 +548,11 @@ void clustering(int index/*TString file_name*/) // by analyzing the tree_both
 	int DSE;
 	int eID;
 
-	tree_both_in -> SetBranchAddress("nele",&event_length);
+	if (isData){tree_both_in -> SetBranchAddress("nele",&event_length);}
 
 	tree_both_in -> SetBranchAddress("camac_adc",&camac_adc);
 	tree_both_in -> SetBranchAddress("camac_tdc",&camac_tdc);
-	tree_both_in -> SetBranchAddress("INTT_event",&INTT_event);
+	if (isData){tree_both_in -> SetBranchAddress("INTT_event",&INTT_event);}
 
 	tree_both_in -> SetBranchAddress("adc",&adc);
 	tree_both_in -> SetBranchAddress("chip_id",&chip_id);
@@ -544,14 +563,23 @@ void clustering(int index/*TString file_name*/) // by analyzing the tree_both
 	tree_both_in -> SetBranchAddress("bco",&bco);
 	tree_both_in -> SetBranchAddress("bco_full",&bco_full);
 
-	tree_both_in -> SetBranchAddress("DSE",&DSE);
-	tree_both_in -> SetBranchAddress("eID",&eID);
+	if (isData){tree_both_in -> SetBranchAddress("DSE",&DSE);}
+	if (isData){tree_both_in -> SetBranchAddress("eID",&eID);}
 
 	printf("------------------------- data loading start -------------------------\n");
 	for (int i=0; i<event_N; i++)
 	{
 		if (i%info_sampling==0) printf("loading data : %i \n",i);
 		tree_both_in -> GetEntry(i);
+
+		if (!isData){ // note : MC file
+			event_length = chip_id->size();
+			INTT_event = 1;
+
+			DSE = 0;
+			eID = i;
+		}
+
 
 		// note : the level-1 selection is shown below
 		// todo : the "INTT_event == 1" is removed from the line below. 2022/11/29
@@ -635,6 +663,12 @@ void clustering(int index/*TString file_name*/) // by analyzing the tree_both
 
 					int convert_chipID = -(chip_id -> at(i1))+ (1 + int((chip_id -> at(i1)) / 14)) * 13;
 					int convert_chanID = int((chip_id -> at(i1)) / 14) * 255+ pow(-1, int((chip_id -> at(i1)) / 14)) * chan_id -> at(i1);
+
+					if (isHotChannelMasked && std::find(run64_HotChannel_vec.begin(), run64_HotChannel_vec.end(), Form("%i_%i_%i", module->at(i1), chip_id->at(i1), chan_id->at(i1))) != run64_HotChannel_vec.end())
+					{
+						// cout<<"----WWW---- the event is skipped due to the hot channel, eID : "<<eID<<" ----WWW----"<<endl;
+						continue;
+					}
 
 					if      (module->at(i1) == module_ID[0])
 					{
@@ -954,7 +988,7 @@ void clustering(int index/*TString file_name*/) // by analyzing the tree_both
 		vector<double> cluster_info_adc;
 
 		// TFile * cluster_info_output_file = new TFile(Form("%s/folder_%s/cluster_information_offset%.4f_adcinfo_NoCamac.root",folder_direction.Data(),output_folder_name.Data(),alignment_array[1]), "RECREATE");
-		TFile * cluster_info_output_file = new TFile(Form("%s/%s_clusters.root",folder_direction.Data(), file_name.Data()), "RECREATE");
+		TFile * cluster_info_output_file = new TFile(Form("%s/%s.root",folder_direction.Data(), file_name_out.Data()), "RECREATE");
 		cluster_info_output_file -> cd();
 		TTree * cluster_info_output_tree = new TTree("cluster_info", "cluster_info");
 		cluster_info_output_tree -> Branch("eID",&cluster_info_eID);

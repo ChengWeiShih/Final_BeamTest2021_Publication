@@ -155,6 +155,10 @@ void ResidualCompAna::PrepareOutputFile() {
     tree_out->Branch("ClusAdc_cut", &ClusAdc_cut);
     tree_out->Branch("slope_cut", &slope_cut);
     tree_out->Branch("pos_cut", &pos_cut);
+
+    tree_residual_out = new TTree("tree_residual","tree_l1_residual");
+    tree_residual_out->Branch("l1_residual", &out_l1_residual);
+    tree_residual_out->Branch("l2_residual", &out_l2_residual);
 }
 
 void ResidualCompAna::PrepareHistFit() {
@@ -179,7 +183,7 @@ void ResidualCompAna::PrepareHistFit() {
 
 
     h1D_l1_residual = new TH1D("h1D_l1_residual","h1D_l1_residual;L1 - (L2L0 interpolation) [mm];Entries",50,-1,1);
-    h1D_l2_residual = new TH1D("h1D_l2_residual","h1D_l2_residual;L2 - (L1L0 extrapolation) [mm];Entries",50,-1,1);
+    h1D_l2_residual = new TH1D("h1D_l2_residual","h1D_l2_residual;L2 - (L1L0 extrapolation) [mm];Entries",20,-1.45,1.45);
     h1D_scattering = new TH1D("h1D_scattering","h1D_scattering; (L2L1 slope) - (L1L0 slope)",50,-0.05,0.05);
 
 }
@@ -409,13 +413,24 @@ void ResidualCompAna::GetHistsForComp(double slope_cut_in, double pos_cut_in){
         // note : the position cut
         if ( fabs(l0l1_pos) >= pos_cut ) {continue;}
 
+        out_l1_residual = (CheckedCol_L1_vec[0].pos + l1_alignment_correction) - ( (CheckedCol_L2_vec[0].pos + CheckedCol_L0_vec[0].pos) ) / 2.;
+
         h1D_l1_residual -> Fill(
-            (CheckedCol_L1_vec[0].pos + l1_alignment_correction) - ( (CheckedCol_L2_vec[0].pos + CheckedCol_L0_vec[0].pos) ) / 2.
+            out_l1_residual
         ); 
-        // h1D_l2_residual
+        
         h1D_scattering -> Fill(
             (( CheckedCol_L2_vec[0].pos - (CheckedCol_L1_vec[0].pos + l1_alignment_correction) )/actual_xpos[1]) - (( (CheckedCol_L1_vec[0].pos + l1_alignment_correction) - CheckedCol_L0_vec[0].pos )/actual_xpos[1])
         );
+
+        double L2_extrapolated_pos = CheckedCol_L0_vec[0].pos + (( (CheckedCol_L1_vec[0].pos + l1_alignment_correction) - CheckedCol_L0_vec[0].pos ) / actual_xpos[1]) * actual_xpos[2];
+        out_l2_residual = CheckedCol_L2_vec[0].pos - L2_extrapolated_pos;
+        h1D_l2_residual -> Fill(
+            out_l2_residual
+        );
+
+        
+        tree_residual_out->Fill();
 
     } // note : loop of cluster_info_NoL1Aligned_vec
 }
@@ -467,6 +482,8 @@ void ResidualCompAna::EndRun(){
 
     tree_out->Fill();
     tree_out->Write();
+
+    tree_residual_out->Write();
 
     file_out->Close();
 }

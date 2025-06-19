@@ -36,6 +36,7 @@ int Run52_DataMC_comp()
     );
 
     TH1D * data_h1D_l1_residual = (TH1D*) (Run52Data -> Get_h1D_l1_residual()) -> Clone("data_h1D_l1_residual");
+    TH1D * data_h1D_l2_residual = (TH1D*) (Run52Data -> Get_h1D_l2_residual()) -> Clone("data_h1D_l2_residual");
     TH1D * data_h1D_scattering = (TH1D*) (Run52Data -> Get_h1D_scattering()) -> Clone("data_h1D_scattering");
 
     
@@ -72,6 +73,7 @@ int Run52_DataMC_comp()
     );
 
     TH1D * MC_h1D_l1_residual = (TH1D*) (Run52MC -> Get_h1D_l1_residual()) -> Clone("MC_h1D_l1_residual");
+    TH1D * MC_h1D_l2_residual = (TH1D*) (Run52MC -> Get_h1D_l2_residual()) -> Clone("MC_h1D_l2_residual");
     TH1D * MC_h1D_scattering = (TH1D*) (Run52MC -> Get_h1D_scattering()) -> Clone("MC_h1D_scattering");
 
     
@@ -87,9 +89,13 @@ int Run52_DataMC_comp()
     // TString plot_scattering_name = Form("DataRun52U8_MC%s_scattering_",MC_selected_Column_string.Data());
     // dataMC_comp (data_scattering_hist, MC_scattering_hist, MC_folder_direction , plot_scattering_name, titles_scattering_vec, ratio_Y_range_pair,true, false);
     
-    vector<TString> titles_residual_vec = {"L1 - (L2L0 interpolation) [mm]","Entries (A.U.)"};
+    vector<TString> titles_residual_vec = {"Residual, L1 - (L2L0 interpolation) [mm]","Entries (A.U.)"};
     TString plot_residual_name = Form("DataRun52U%d_MCU%d_residual_", data_selected_column, MC_selected_Column);
     dataMC_comp (data_h1D_l1_residual, MC_h1D_l1_residual, MC_output_directory , plot_residual_name, titles_residual_vec, ratio_Y_range_pair,true, false);
+
+    titles_residual_vec = {"L2 - (L1L0 extrapolation) [mm]","Entries (A.U.)"};
+    plot_residual_name = Form("DataRun52U%d_MCU%d_residualL2_", data_selected_column, MC_selected_Column);
+    dataMC_comp (data_h1D_l2_residual, MC_h1D_l2_residual, MC_output_directory , plot_residual_name, titles_residual_vec, ratio_Y_range_pair,true, false);
 
     Run52Data -> EndRun();
     Run52MC -> EndRun();

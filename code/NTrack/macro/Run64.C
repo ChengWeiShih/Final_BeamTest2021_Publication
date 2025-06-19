@@ -6,7 +6,8 @@ R__LOAD_LIBRARY(../libNTrackAna.so)
 
 int Run64_temp(
     double noise_hit_distance,
-    bool isColumnRejected
+    bool isColumnRejected,
+    bool isHotChannelMasked
 ) {
 
     // double noise_hit_distance = 0.75; // note : unit : mm
@@ -16,10 +17,12 @@ int Run64_temp(
     std::string output_plot_name_suffix = "";
     output_plot_name_suffix += (isColumnRejected) ? "_ColumnRejected" : "_AllColumn";
     output_plot_name_suffix += Form("_noiseHitDistance_%.0fum", noise_hit_distance * 1000);
+    output_plot_name_suffix += (isHotChannelMasked) ? "_HotChannelMasked" : "";
 
     std::string data_input_directory = "/data4/chengwei/Geant4/INTT_simulation/G4/for_CW/Final_BeamTest2021_Publication/data/Run64";
-    std::string data_input_filename = "run64_no_clone_filter_all_clusters.root";
-    std::string data_output_directory = "/data4/chengwei/Geant4/INTT_simulation/G4/for_CW/Final_BeamTest2021_Publication/data/Run64/NTrack";
+    std::string data_input_filename = (isHotChannelMasked) ? "run64_no_clone_filter_all_HotChannelMask_clusters.root" : "run64_no_clone_filter_all_clusters.root";
+    std::string data_output_directory = "/data4/chengwei/Geant4/INTT_simulation/G4/for_CW/Final_BeamTest2021_Publication/data/Run64/";
+    data_output_directory += (isHotChannelMasked) ? "NTrack_HotChannelMask" : "NTrack";
     std::string data_output_file_name_suffix = "test1";
 
     NTrackAna * data_run64 = new NTrackAna(
@@ -51,8 +54,9 @@ int Run64_temp(
 
 
     std::string MC_input_directory = "/data4/chengwei/Geant4/INTT_simulation/G4/for_CW/Final_BeamTest2021_Publication/data/Run64/MC";
-    std::string MC_input_filename = "cluster_information_offset-0.0000_adcinfo_SingleTrigger.root";
-    std::string MC_output_directory = "/data4/chengwei/Geant4/INTT_simulation/G4/for_CW/Final_BeamTest2021_Publication/data/Run64/MC/NTrack";
+    std::string MC_input_filename = (isHotChannelMasked) ? "MC_run64_HotChannelMask_clusters.root" : "cluster_information_offset-0.0000_adcinfo_SingleTrigger.root";
+    std::string MC_output_directory = "/data4/chengwei/Geant4/INTT_simulation/G4/for_CW/Final_BeamTest2021_Publication/data/Run64/MC/";
+    MC_output_directory += (isHotChannelMasked) ? "NTrack_HotChannelMask" : "NTrack";
     std::string MC_output_file_name_suffix = "test1";
 
     NTrackAna * MC_run64 = new NTrackAna(
@@ -165,7 +169,7 @@ int Run64_temp(
 
 
     dataMC_comp(data_h1D_Column_NTrack, MC_h1D_Column_NTrack, MC_output_directory, Form("c1_h1D_Column_NTrack_%s",output_plot_name_suffix.c_str()), {"Column ID", "Number of reco. tracks (A.U.)"}, false, false);
-    dataMC_comp(data_h1D_NTrack_NoZero, MC_h1D_NTrack_NoZero, MC_output_directory, Form("c1_h1D_NTrack_NoZero_%s",output_plot_name_suffix.c_str()), {"Number of reco. tracks","Entries (A.U.)"}, true, false);
+    dataMC_comp(data_h1D_NTrack_NoZero, MC_h1D_NTrack_NoZero, MC_output_directory, Form("c1_h1D_NTrack_NoZero_%s",output_plot_name_suffix.c_str()), {"Number of reconstructed tracks","Entries (A.U.)"}, true, false);
     // dataMC_comp(data_h1D_NTrackWithZero, MC_h1D_NTrackWithZero, MC_output_directory, Form("c1_h1D_NTrackWithZero_%s",output_plot_name_suffix.c_str()), {"Number of reco. tracks","Entries (A.U.)"}, true, false);
     // dataMC_comp(data_h1D_l0_ClusPosFitDiff, MC_h1D_l0_ClusPosFitDiff, MC_output_directory, Form("c1_h1D_l0_ClusPosFitDiff_%s",output_plot_name_suffix.c_str()), {"ClusPos - Fit [mm] (L0)","Entries (A.U.)"}, true, false);
     // dataMC_comp(data_h1D_l1_ClusPosFitDiff, MC_h1D_l1_ClusPosFitDiff, MC_output_directory, Form("c1_h1D_l1_ClusPosFitDiff_%s",output_plot_name_suffix.c_str()), {"ClusPos - Fit [mm] (L1)","Entries (A.U.)"}, true, false);
@@ -212,9 +216,14 @@ void Run64(){
     // Run64_temp(0.85, true);
     // sleep(5);
 
-    Run64_temp(0.70, true);
-    sleep(5);
-
-    Run64_temp(0.70, false);
+    // Division: ------------------------------------
+    // Run64_temp(0.70, true, false);
     // sleep(5);
+
+    // Run64_temp(0.70, false, false);
+    // sleep(5);
+
+    Run64_temp(0.70, false, true);
+    // sleep(5);
+
 }

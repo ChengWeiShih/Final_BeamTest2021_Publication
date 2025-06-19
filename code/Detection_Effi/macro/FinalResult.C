@@ -260,8 +260,8 @@ RelativeVariationSet GetVariation (
     VariationSet_vec[0].effi_pos_gr -> SetMarkerStyle(20);
     VariationSet_vec[0].effi_pos_gr -> SetMarkerSize(1);
     VariationSet_vec[0].effi_pos_gr -> SetMarkerColor(1);
-    VariationSet_vec[0].effi_pos_gr -> GetXaxis() -> SetTitle("Y axis [mm]");
-    VariationSet_vec[0].effi_pos_gr -> GetYaxis() -> SetTitle("Hit Detection Efficiency (%)");
+    VariationSet_vec[0].effi_pos_gr -> GetXaxis() -> SetTitle("Track position in the y-axis [mm]");
+    VariationSet_vec[0].effi_pos_gr -> GetYaxis() -> SetTitle("Hit detection efficiency (%)");
     VariationSet_vec[0].effi_pos_gr -> GetXaxis() -> SetLabelOffset(999);
     VariationSet_vec[0].effi_pos_gr -> GetXaxis() -> SetLabelSize(0);
     VariationSet_vec[0].effi_pos_gr -> GetXaxis() -> SetTitleOffset(999);
@@ -313,7 +313,7 @@ RelativeVariationSet GetVariation (
         );
         temp_gr -> GetYaxis() -> SetRangeUser(0.99,1.01);
         temp_gr -> GetXaxis() -> CenterTitle(true);
-        temp_gr -> GetXaxis() -> SetTitle("Y axis [mm]");
+        temp_gr -> GetXaxis() -> SetTitle("Track position in the y-axis [mm]");
         temp_gr -> GetYaxis() -> SetTitle("Ratio to baseline");
         temp_gr -> GetXaxis() -> SetLimits(left_pos_edge, right_pos_edge);
         temp_gr -> Draw(plot_draw_text.c_str());
@@ -521,8 +521,8 @@ std::pair<double,double> CombineSyst(
     leg_errors_Final -> SetBorderSize(0);
     leg_errors_Final -> SetTextSize(0.03);
 
-    TH1D * h1D_ErrorSum_Up   = new TH1D("h1D_ErrorSum_Up","h1D_ErrorSum_Up;Y axis [mm];Relative Variation",    N_bins_pos_hist,left_pos_edge,right_pos_edge);
-    TH1D * h1D_ErrorSum_Down = new TH1D("h1D_ErrorSum_Down","h1D_ErrorSum_Down;Y axis [mm];Relative Variation",N_bins_pos_hist,left_pos_edge,right_pos_edge);
+    TH1D * h1D_ErrorSum_Up   = new TH1D("h1D_ErrorSum_Up","h1D_ErrorSum_Up;Track position in the y-axis [mm];Relative Variation",    N_bins_pos_hist,left_pos_edge,right_pos_edge);
+    TH1D * h1D_ErrorSum_Down = new TH1D("h1D_ErrorSum_Down","h1D_ErrorSum_Down;Track position in the y-axis [mm];Relative Variation",N_bins_pos_hist,left_pos_edge,right_pos_edge);
     h1D_ErrorSum_Up -> Reset("ICESM");
     h1D_ErrorSum_Down -> Reset("ICESM");
 
@@ -767,8 +767,8 @@ std::pair<double,double> CombineSyst(
     effi_pos_gr_baseline -> SetMarkerSize(1);
     effi_pos_gr_baseline -> SetMarkerColor(1);
     effi_pos_gr_baseline -> GetXaxis() -> CenterTitle(true);
-    effi_pos_gr_baseline -> GetXaxis() -> SetTitle("Y axis [mm]");
-    effi_pos_gr_baseline -> GetYaxis() -> SetTitle("Hit Detection Efficiency (%)");
+    effi_pos_gr_baseline -> GetXaxis() -> SetTitle("Track position in the y-axis [mm]");
+    effi_pos_gr_baseline -> GetYaxis() -> SetTitle("Hit detection efficiency (%)");
     effi_pos_gr_baseline -> GetYaxis() -> SetRangeUser(95, 102);
     effi_pos_gr_baseline -> GetXaxis() -> SetLimits(-10, 10);
 
@@ -803,8 +803,8 @@ std::pair<double,double> CombineSyst(
     gr_syst_template->SetMarkerStyle(20);
     gr_syst_template->SetMarkerSize(0);
     gr_syst_template->SetMarkerColorAlpha(1,0);
-    gr_syst_template->GetXaxis()->SetTitle("Y axis [mm]");
-    gr_syst_template->GetYaxis()->SetTitle("Hit Detection Efficiency (%)");
+    gr_syst_template->GetXaxis()->SetTitle("Track position in the y-axis [mm]");
+    gr_syst_template->GetYaxis()->SetTitle("Hit detection efficiency (%)");
     gr_syst_template->GetXaxis()->CenterTitle(true);
     gr_syst_template->GetYaxis()->CenterTitle(true);
     gr_syst_template->GetYaxis()->SetRangeUser(95, 102);
@@ -843,12 +843,12 @@ std::pair<double,double> CombineSyst(
 
     line_99 -> Draw("same");
     ltx->DrawLatex(0.38, 0.88, Form("#it{#bf{sPHENIX INTT}} Beam Test 2021"));
-    ltx_draw->DrawLatex(0.44, 0.21, "*Beam spot region shown only");
+    // ltx_draw->DrawLatex(0.44, 0.21, "*Beam spot region shown only");
 
     leg_errors_Final -> Draw("same");
 
     ltx_draw->SetTextSize(0.025);
-    ltx_draw->DrawLatex(0.2, 0.3, Form("INTT Ladder Hit Detection Effi. (Comb.): %.2f ^{+%.2f}_{-%.2f} (stat.) ^{+%.2f}_{-%.2f} (syst.) %%",
+    ltx_draw->DrawLatex(0.2, 0.3, Form("INTT ladder hit detection effi. (Comb.): %.2f ^{+%.2f}_{-%.2f} (stat.) ^{+%.2f}_{-%.2f} (syst.) %%",
             all_baseline_vec[0], 
             all_baseline_vec[1], all_baseline_vec[2], 
             all_sum_MaxVariationUp * all_baseline_vec[0], all_sum_MaxVariationDown * all_baseline_vec[0]
